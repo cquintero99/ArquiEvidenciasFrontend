@@ -1,7 +1,7 @@
 {
   "name": "argon-dashboard-react",
   "version": "1.2.3",
-  "homepage":"http://cquintero99.github.io/ArquiEvidenciasFrontend",
+  "homepage": "http://cquintero99.github.io/ArquiEvidenciasFrontend",
   "description": "React version of Argon Dashboard by Creative Tim",
   "main": "index.js",
   "repository": {
@@ -23,10 +23,9 @@
   "bugs": {
     "url": "https://github.com/creativetimofficial/argon-dashboard-react/issues"
   },
-  
   "scripts": {
-    "predeploy": "npm run build", 
-    "deploy": "gh-pages -d build", 
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -51,6 +50,7 @@
     "chart.js": "2.9.4",
     "classnames": "2.3.2",
     "gh": "^2.8.9",
+    "gh-pages": "^5.0.0",
     "moment": "2.29.4",
     "nouislider": "15.4.0",
     "pages": "^0.0.16",
