@@ -30,6 +30,12 @@ var routes = [
     icon: "ni ni-tv-2 text-primary",
     component: <Index />,
     layout: "/admin",
+  },{
+    path: "/teacher/index",
+    name: "Profesor",
+    icon: "ni ni-tv-2 text-primary",
+    component: <Index />,
+    layout: "/admin",
   },
   {
     path: "/icons",
