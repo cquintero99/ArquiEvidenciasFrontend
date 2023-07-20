@@ -47,6 +47,17 @@ const Login = () => {
     })
     return result;
   }
+  async function verificarEmail(usuario) {
+    const result = await fetch("http://localhost:8080/usuario/verificar", {
+      method: 'POST',
+      body: JSON.stringify(usuario),
+      headers: {
+        "Content-type": "application/json"
+      }
+    })
+    return result;
+  }
+
 
   const handelSubmit = (e) => {
     e.preventDefault()
@@ -61,30 +72,47 @@ const Login = () => {
 
     }
     console.log(usuario)
-    if(email!=="" && password!==""){
-      iniciarSesion(usuario)
-      .then(response => response)
-      .then(JWT => {
-        if (JWT.status === 200 && JWT.headers.has('Authorization')) {
-          const bearerToken = JWT.headers.get('Authorization');
-          const token = bearerToken.replace('Bearer ', '');
+    if (email !== "" && password !== "") {
+      const usuarioVerificar = {
+        correoInstitucional: formData.get("email")
+      }
+      verificarEmail(usuarioVerificar)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+          if (data == true) {
+            iniciarSesion(usuario)
+              .then(response => response)
+              .then(JWT => {
+                if (JWT.status === 200 && JWT.headers.has('Authorization')) {
+                  const bearerToken = JWT.headers.get('Authorization');
+                  const token = bearerToken.replace('Bearer ', '');
 
 
-          localStorage.setItem('token', token);
-          localStorage.setItem("data", JSON.stringify(parseJwt(token)))
-          navigate("/admin/index")
-          //window.location.href = "/admin/index"
+                  localStorage.setItem('token', token);
+                  localStorage.setItem("data", JSON.stringify(parseJwt(token)))
+                  navigate("/admin/index")
+                  //window.location.href = "/admin/index"
 
-        } else {
-          alert("Contraseña Incorrecta")
-        }
-      })
-      .catch(err => {
-        
+                } else {
+                  alert("Contraseña Incorrecta")
+                }
+              })
+              .catch(err => {
 
-        console.log(err)
+                alert("Error" + err)
+                console.log(err)
 
-      })
+              })
+
+          } else {
+            alert("Usuario no verificado")
+          }
+        })
+        .catch(err => {
+          alert("usuario No verificado")
+        })
+
     }
 
 
@@ -102,10 +130,10 @@ const Login = () => {
   return (
     <>
       <Col lg="5" md="7">
-        <Card className="bg-secondary shadow border-0">
+        <Card className="bg-gradient-white shadow border ">
 
           <CardBody className="px-lg-5 py-lg-5">
-            <h1 className="text-center p-3 ">Iniciar Sesion</h1>
+            <h1 className="text-center p-3 text-dark">Iniciar Sesion</h1>
             <Form role="form" onSubmit={handelSubmit}>
               <FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
@@ -139,7 +167,7 @@ const Login = () => {
               </FormGroup>
 
               <div className="text-center">
-                <Button className="my-4" color="primary" type="submit">
+                <Button className="my-4" color="danger" type="submit">
                   Iniciar Sesion
                 </Button>
               </div>
@@ -153,7 +181,9 @@ const Login = () => {
               href="#pablo"
               onClick={(e) => e.preventDefault()}
             >
-              <small>Olvide mi contraseña?</small>
+              <small
+                className="text-dark h5"
+              >Olvide mi contraseña?</small>
             </a>
           </Col>
         </Row>

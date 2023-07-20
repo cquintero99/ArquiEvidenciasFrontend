@@ -32,7 +32,7 @@ const AdminNavbar = () => {
           <NavbarBrand to="/" tag={Link}>
             <div className="marquee">
               
-            <h1 className="fw-bold">ArquiEvidencias UFPS</h1>
+            <h1 className="fw-bold text-white">ArquiEvidencias UFPS</h1>
             </div>
 
            
