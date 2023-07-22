@@ -32,31 +32,13 @@ import {
   Col,
 } from "reactstrap";
 import { useNavigate } from 'react-router-dom';
+import {iniciarSesion, verificarEmail} from 'views/fetch/Peticiones'
 
 
 
 const Login = () => {
   const navigate = useNavigate();
-  async function iniciarSesion(usuario) {
-    const result = await fetch("http://localhost:8080/user/login", {
-      method: 'POST',
-      body: JSON.stringify(usuario),
-      headers: {
-        "Content-type": "application/json"
-      }
-    })
-    return result;
-  }
-  async function verificarEmail(usuario) {
-    const result = await fetch("http://localhost:8080/usuario/verificar", {
-      method: 'POST',
-      body: JSON.stringify(usuario),
-      headers: {
-        "Content-type": "application/json"
-      }
-    })
-    return result;
-  }
+ 
 
 
   const handelSubmit = (e) => {
@@ -71,7 +53,7 @@ const Login = () => {
       password
 
     }
-    console.log(usuario)
+    
     if (email !== "" && password !== "") {
       const usuarioVerificar = {
         correoInstitucional: formData.get("email")
@@ -79,8 +61,8 @@ const Login = () => {
       verificarEmail(usuarioVerificar)
         .then(response => response.json())
         .then(data => {
-          console.log(data)
-          if (data == true) {
+          if (data === true) {
+
             iniciarSesion(usuario)
               .then(response => response)
               .then(JWT => {
@@ -91,8 +73,10 @@ const Login = () => {
 
                   localStorage.setItem('token', token);
                   localStorage.setItem("data", JSON.stringify(parseJwt(token)))
-                  navigate("/admin/index")
-                  //window.location.href = "/admin/index"
+                  const usuario=JSON.parse(localStorage.getItem("data"))
+                  const rol = usuario.roles[0].nombre.split("_")[1].toLowerCase();
+                  localStorage.setItem("modulo",rol)
+                  navigate("/"+rol+"/index")
 
                 } else {
                   alert("Contraseña Incorrecta")
@@ -130,7 +114,9 @@ const Login = () => {
   return (
     <>
       <Col lg="5" md="7">
-        <Card className="bg-gradient-white shadow border ">
+        <Card className="bg-gradient-white shadow border my-2"
+         color="dark"
+         outline>
 
           <CardBody className="px-lg-5 py-lg-5">
             <h1 className="text-center p-3 text-dark">Iniciar Sesion</h1>

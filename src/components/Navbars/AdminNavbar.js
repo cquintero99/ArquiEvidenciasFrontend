@@ -15,6 +15,8 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+import React, { useEffect, useState } from "react";
+
 import { Link } from "react-router-dom";
 // reactstrap components
 import {
@@ -33,9 +35,18 @@ import {
   Container,
   Media,
 } from "reactstrap";
+import { useNavigate } from 'react-router-dom';
 
 const AdminNavbar = (props) => {
-  console.log(props)
+  const navigate = useNavigate();
+ // Función para cerrar sesión y redirigir al usuario al login
+ const handleCerrarSesion = () => {
+  // Borramos el token del localStorage
+  localStorage.clear()
+
+  // Redirigimos al usuario al login
+  navigate("/auth/login")
+};
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -85,7 +96,7 @@ const AdminNavbar = (props) => {
                   <span>Support</span>
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+                <DropdownItem  onClick={handleCerrarSesion}>
                   <i className="ni ni-user-run" />
                   <span>Cerrar Sesion</span>
                 </DropdownItem>

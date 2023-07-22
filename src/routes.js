@@ -22,22 +22,102 @@ import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
+import Estudiantes from "views/examples/Estudiantes";
 
 var routes = [
+  
   {
     path: "/index",
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
     component: <Index />,
-    layout: "/admin",
-  },{
-    path: "/teacher/index",
-    name: "Profesor",
-    icon: "ni ni-tv-2 text-primary",
-    component: <Index />,
-    layout: "/admin",
+    layout: "/director",
+  },
+
+  {
+    path: "/profesores",
+    name: "Profesores",
+    icon: "ni ni-badge  text-red ",
+    component: <Tables />,
+    layout: "/director",
   },
   {
+    path: "/estudiantes",
+    name: "Estudiantes",
+    icon: "ni ni-circle-08 text-primary",
+    component: <Estudiantes />,
+    layout: "/director",
+  },
+  {
+    path: "/cursos",
+    name: "Cursos",
+    icon: "ni ni-collection text-info",
+    component: <Tables />,
+    layout: "/director",
+  },
+
+  {
+    path: "/grupos",
+    name: "Grupos",
+    icon: "ni ni-books text-yellow",
+    component: <Tables />,
+    layout: "/director",
+  },
+  {
+    path: "/icons",
+    name: "Icons",
+    icon: "ni ni-planet text-blue",
+    component: <Icons />,
+    layout: "/director",
+  },
+  
+  {
+    path: "/index",
+    name: "Dashboard",
+    icon: "ni ni-tv-2 text-primary",
+    component: <Index />,
+    layout: "/profesor",
+  },
+  {
+    path: "/cursos",
+    name: "Cursos",
+    icon: "ni ni-collection text-info",
+    component: <Tables />,
+    layout: "/profesor",
+  },
+  {
+    path: "/index",
+    name: "Dashboard",
+    icon: "ni ni-tv-2 text-primary",
+    component: <Index />,
+    layout: "/estudiante",
+  },
+  {
+    path: "/cursos",
+    name: "Cursos",
+    icon: "ni ni-collection text-info",
+    component: <Tables />,
+    layout: "/estudiante",
+  },
+  {
+    path: "/login",
+    name: "Login",
+    icon: "ni ni-key-25 text-info",
+    component: <Login />,
+    layout: "/auth",
+  },
+  {
+    path: "/register",
+    name: "Register",
+    icon: "ni ni-circle-08 text-pink",
+    component: <Register />,
+    layout: "/auth",
+  },
+];
+export default routes;
+{
+  /*
+ {
     path: "/icons",
     name: "Icons",
     icon: "ni ni-planet text-blue",
@@ -65,19 +145,7 @@ var routes = [
     component: <Tables />,
     layout: "/admin",
   },
-  {
-    path: "/login",
-    name: "Login",
-    icon: "ni ni-key-25 text-info",
-    component: <Login />,
-    layout: "/auth",
-  },
-  {
-    path: "/register",
-    name: "Register",
-    icon: "ni ni-circle-08 text-pink",
-    component: <Register />,
-    layout: "/auth",
-  },
-];
-export default routes;
+  
+
+*/
+}
