@@ -23,14 +23,14 @@ import { NavItem, NavLink, Nav, Container, Row, Col } from "reactstrap";
 const Login = () => {
   return (
     <>
-      <footer className="py-5">
+      <footer className="py-5 ">
         <Container>
-          <Row className="align-items-center justify-content-xl-between">
+          <Row className="align-items-center justify-content-xl-between ">
             <Col xl="6">
-              <div className="copyright text-center text-xl-left text-muted">
+              <div className="copyright text-center text-xl-left text-dark">
                 © {new Date().getFullYear()}{" "}
                 <a
-                  className="font-weight-bold ml-1"
+                  className="font-weight-bold ml-1 text-dark"
                   href="https://www.creative-tim.com?ref=adr-auth-footer"
                   target="_blank"
                 >

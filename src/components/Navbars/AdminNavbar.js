@@ -15,6 +15,8 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+import React, { useEffect, useState } from "react";
+
 import { Link } from "react-router-dom";
 // reactstrap components
 import {
@@ -33,8 +35,18 @@ import {
   Container,
   Media,
 } from "reactstrap";
+import { useNavigate } from 'react-router-dom';
 
 const AdminNavbar = (props) => {
+  const navigate = useNavigate();
+ // Función para cerrar sesión y redirigir al usuario al login
+ const handleCerrarSesion = () => {
+  // Borramos el token del localStorage
+  localStorage.clear()
+
+  // Redirigimos al usuario al login
+  navigate("/auth/login")
+};
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -45,18 +57,7 @@ const AdminNavbar = (props) => {
           >
             {props.brandText}
           </Link>
-          <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
-            <FormGroup className="mb-0">
-              <InputGroup className="input-group-alternative">
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
-                    <i className="fas fa-search" />
-                  </InputGroupText>
-                </InputGroupAddon>
-                <Input placeholder="Search" type="text" />
-              </InputGroup>
-            </FormGroup>
-          </Form>
+          
           <Nav className="align-items-center d-none d-md-flex" navbar>
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
@@ -76,11 +77,11 @@ const AdminNavbar = (props) => {
               </DropdownToggle>
               <DropdownMenu className="dropdown-menu-arrow" right>
                 <DropdownItem className="noti-title" header tag="div">
-                  <h6 className="text-overflow m-0">Welcome!</h6>
+                  <h6 className="text-overflow m-0">Bienvenido!</h6>
                 </DropdownItem>
                 <DropdownItem to="/admin/user-profile" tag={Link}>
                   <i className="ni ni-single-02" />
-                  <span>My profile</span>
+                  <span>Mi Perfil</span>
                 </DropdownItem>
                 <DropdownItem to="/admin/user-profile" tag={Link}>
                   <i className="ni ni-settings-gear-65" />
@@ -95,9 +96,9 @@ const AdminNavbar = (props) => {
                   <span>Support</span>
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+                <DropdownItem  onClick={handleCerrarSesion}>
                   <i className="ni ni-user-run" />
-                  <span>Logout</span>
+                  <span>Cerrar Sesion</span>
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>

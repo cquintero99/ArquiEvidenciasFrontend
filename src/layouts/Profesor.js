@@ -18,24 +18,18 @@
 import React from "react";
 import { useLocation, Route, Routes, Navigate } from "react-router-dom";
 // reactstrap components
-import { Container, Row, Col } from "reactstrap";
-
+import { Container } from "reactstrap";
 // core components
-import AuthNavbar from "components/Navbars/AuthNavbar.js";
-import AuthFooter from "components/Footers/AuthFooter.js";
+import AdminNavbar from "components/Navbars/AdminNavbar.js";
+import AdminFooter from "components/Footers/AdminFooter.js";
+import Sidebar from "components/Sidebar/ProfesorSidebar";
 
 import routes from "routes.js";
 
-const Auth = (props) => {
+const Profesor = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
 
-  React.useEffect(() => {
-    document.body.classList.add("bg-white");
-    return () => {
-      document.body.classList.remove("bg-default");
-    };
-  }, []);
   React.useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
@@ -44,7 +38,7 @@ const Auth = (props) => {
 
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
-      if (prop.layout === "/auth") {
+      if (prop.layout === "/profesor") {
         return (
           <Route path={prop.path} element={prop.component} key={key} exact />
         );
@@ -54,41 +48,47 @@ const Auth = (props) => {
     });
   };
 
+  const getBrandText = (path) => {
+    for (let i = 0; i < routes.length; i++) {
+      if (
+        props?.location?.pathname.indexOf(routes[i].layout + routes[i].path) !==
+        -1
+      ) {
+        return routes[i].name;
+      }
+    }
+    return "Brand";
+  };
+  //Filtro las rutas para el modulo director
+  const rutasFiltradas = routes.filter((ruta) => ruta.layout === "/profesor")
+  
   return (
     <>
+      <Sidebar
+        {...props}
+       
+        routes={rutasFiltradas}
+        logo={{
+          innerLink: "/profesor/index",
+          imgSrc: require("../assets/img/brand/argon-react.png"),
+          imgAlt: "...",
+        }}
+      />
       <div className="main-content" ref={mainContent}>
-        <AuthNavbar />
-        <div className="header bg-danger py-7 py-lg-8">
-        <div className="separator separator-bottom separator-skew zindex-100">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              preserveAspectRatio="none"
-              version="1.1"
-              viewBox="0 0 2560 100"
-              x="0"
-              y="0"
-            >
-              <polygon
-                className="fill-white "
-                points="2560 0 2560 100 0 100"
-              />
-            </svg>
-          </div>
-         
-        </div>
-        {/* Page content */}
-        <Container className="mt--8 pb-5">
-          <Row className="justify-content-center">
-            <Routes>
-              {getRoutes(routes)}
-              <Route path="*" element={<Navigate to="/auth/login" replace />} />
-            </Routes>
-          </Row>
+        <AdminNavbar
+          {...props}
+          brandText={getBrandText(props?.location?.pathname)}
+        />
+        <Routes>
+          {getRoutes(routes)}
+          <Route path="*" element={<Navigate to="/profesor/index" replace />} />
+        </Routes>
+        <Container fluid>
+          <AdminFooter />
         </Container>
       </div>
-      <AuthFooter />
     </>
   );
 };
 
-export default Auth;
+export default Profesor;

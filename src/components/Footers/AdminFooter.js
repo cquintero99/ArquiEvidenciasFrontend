@@ -33,7 +33,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               target="_blank"
             >
-              Creative Tim
+              Arquitectura Evidencias UFPS
             </a>
           </div>
         </Col>

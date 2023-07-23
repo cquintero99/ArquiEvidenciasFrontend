@@ -15,13 +15,12 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-
+//import Modals from "Modal"
 
 // reactstrap components
 import {
   Button,
   Card,
-  CardHeader,
   CardBody,
   FormGroup,
   Form,
@@ -32,34 +31,95 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import { useNavigate } from 'react-router-dom';
+import {iniciarSesion, verificarEmail} from 'views/fetch/Peticiones'
 
 
 
 const Login = () => {
+  const navigate = useNavigate();
+ 
+
 
   const handelSubmit = (e) => {
     e.preventDefault()
 
-    console.log(e)
+    //console.log(e)
     const formData = new FormData(e.target);
     const email = formData.get("email");
     const password = formData.get("password");
-    const usuario={
+    const usuario = {
       email,
       password
 
     }
-    console.log(usuario)
+    
+    if (email !== "" && password !== "") {
+      const usuarioVerificar = {
+        correoInstitucional: formData.get("email")
+      }
+      verificarEmail(usuarioVerificar)
+        .then(response => response.json())
+        .then(data => {
+          if (data === true) {
+
+            iniciarSesion(usuario)
+              .then(response => response)
+              .then(JWT => {
+                if (JWT.status === 200 && JWT.headers.has('Authorization')) {
+                  const bearerToken = JWT.headers.get('Authorization');
+                  const token = bearerToken.replace('Bearer ', '');
 
 
+                  localStorage.setItem('token', token);
+                  localStorage.setItem("data", JSON.stringify(parseJwt(token)))
+                  const usuario=JSON.parse(localStorage.getItem("data"))
+                  const rol = usuario.roles[0].nombre.split("_")[1].toLowerCase();
+                  localStorage.setItem("modulo",rol)
+                  navigate("/"+rol+"/index")
+
+                } else {
+                  alert("Contraseña Incorrecta")
+                }
+              })
+              .catch(err => {
+
+                alert("Error" + err)
+                console.log(err)
+
+              })
+
+          } else {
+            alert("Usuario no verificado")
+          }
+        })
+        .catch(err => {
+          alert("usuario No verificado")
+        })
+
+    }
+
+
+  }
+
+  function parseJwt(token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
   }
   return (
     <>
       <Col lg="5" md="7">
-        <Card className="bg-secondary shadow border-0">
+        <Card className="bg-gradient-white shadow border my-2"
+         color="dark"
+         outline>
 
           <CardBody className="px-lg-5 py-lg-5">
-            <h1 className="text-center p-3 ">Iniciar Sesion</h1>
+            <h1 className="text-center p-3 text-dark">Iniciar Sesion</h1>
             <Form role="form" onSubmit={handelSubmit}>
               <FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
@@ -70,7 +130,7 @@ const Login = () => {
                   </InputGroupAddon>
                   <Input
                     placeholder="Email"
-                    type="email"
+                    type="text"
                     autoComplete="new-email"
                     name="email"
                   />
@@ -91,9 +151,9 @@ const Login = () => {
                   />
                 </InputGroup>
               </FormGroup>
-              
+
               <div className="text-center">
-                <Button className="my-4" color="primary" type="submit">
+                <Button className="my-4" color="danger" type="submit">
                   Iniciar Sesion
                 </Button>
               </div>
@@ -107,16 +167,9 @@ const Login = () => {
               href="#pablo"
               onClick={(e) => e.preventDefault()}
             >
-              <small>Olvide mi contraseña?</small>
-            </a>
-          </Col>
-          <Col className="text-right" xs="6">
-            <a
-              className="text-light"
-              href="#pablo"
-              onClick={(e) => e.preventDefault()}
-            >
-              <small>Crear Cuenta!</small>
+              <small
+                className="text-dark h5"
+              >Olvide mi contraseña?</small>
             </a>
           </Col>
         </Row>
