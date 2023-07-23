@@ -35,18 +35,29 @@ import {
   Container,
   Media,
 } from "reactstrap";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const AdminNavbar = (props) => {
   const navigate = useNavigate();
- // Función para cerrar sesión y redirigir al usuario al login
- const handleCerrarSesion = () => {
-  // Borramos el token del localStorage
-  localStorage.clear()
+  // Función para cerrar sesión y redirigir al usuario al login
+  const handleCerrarSesion = () => {
+    // Borramos el token del localStorage
+    localStorage.clear();
 
-  // Redirigimos al usuario al login
-  navigate("/auth/login")
-};
+    // Redirigimos al usuario al login
+    navigate("/auth/login");
+  };
+  const [nombreUser, setNombreUser] = useState("");
+
+  useEffect(() => {
+    try {
+      const nombreUsuario = JSON.parse(localStorage.getItem("data")).nombre;
+      setNombreUser(nombreUsuario);
+    } catch (error) {
+      // Si hay un error al obtener el nombre del usuario, simplemente dejamos el nombre vacío
+      setNombreUser("");
+    }
+  }, []);
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -57,7 +68,7 @@ const AdminNavbar = (props) => {
           >
             {props.brandText}
           </Link>
-          
+
           <Nav className="align-items-center d-none d-md-flex" navbar>
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
@@ -70,7 +81,7 @@ const AdminNavbar = (props) => {
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      Jessica Jones
+                      {nombreUser} {/* Mostramos el nombre del usuario aquí */}
                     </span>
                   </Media>
                 </Media>
@@ -96,7 +107,7 @@ const AdminNavbar = (props) => {
                   <span>Support</span>
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem  onClick={handleCerrarSesion}>
+                <DropdownItem onClick={handleCerrarSesion}>
                   <i className="ni ni-user-run" />
                   <span>Cerrar Sesion</span>
                 </DropdownItem>
