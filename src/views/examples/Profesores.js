@@ -48,33 +48,30 @@ import {
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
-import { listaEstudiantes } from "views/fetch/Peticiones";
+import { listProfesores } from "views/fetch/ProfesorApi.js";
 import DataTable from "react-data-table-component";
 
 const Tables = () => {
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
-  const [estudiantes, setEstudiantes] = useState([]);
+  const [profesores, setProfesores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState("");
 
   useEffect(() => {
-    const obtenerEstudiantes = async () => {
+    const obtenerProfesores = async () => {
       try {
-        const response = await listaEstudiantes();
+        const response = await listProfesores();
         const data = await response.json();
-        // Aquí tienes acceso al arreglo de estudiantes
-
-        setEstudiantes(data); // Guardamos los datos en el estado para poder utilizarlos en el JSX
-        setLoading(false); // Cambiamos el estado a "false" una vez que se obtienen los datos
+        setProfesores(data);
+        setLoading(false);
       } catch (error) {
-        console.error("Error al obtener estudiantes:", error);
-        setLoading(false); // En caso de error, también cambiamos el estado a "false"
+        console.error("Error al obtener profesores:", error);
+        setLoading(false);
       }
     };
-
-    obtenerEstudiantes();
+    obtenerProfesores();
   }, []);
   const columns = [
     { name: "Nombre", selector: "usuario.nombre", sortable: true },
@@ -84,7 +81,7 @@ const Tables = () => {
       selector: "usuario.correo",
       sortable: true,
     },
-    { name: "Estado Matricula", selector: "estadoMatricula", sortable: true },
+    // { name: "Estado Matricula", selector: "estadoMatricula", sortable: true },
     {
       name: "Ver",
       cell: (row) => (
@@ -96,13 +93,13 @@ const Tables = () => {
     },
     // Puedes agregar más columnas aquí si lo deseas
   ];
-  const handleOpciones = (estudiante) => {
+  const handleOpciones = (profesor) => {
     // Aquí puedes manejar las acciones para el botón de opciones, como mostrar un modal o redirigir a otra página, etc.
-    console.log("Opciones del estudiante:", estudiante);
+    console.log("Opciones del profesor:", profesor);
   };
   // Filtrar los datos en base al término de búsqueda
-  const filteredEstudiantes = estudiantes.filter((estudiante) =>
-    estudiante.usuario.nombre.toLowerCase().includes(filtro.toLowerCase())
+  const filteredProfesores = profesores.filter((profesor) =>
+    profesor.usuario.nombre.toLowerCase().includes(filtro.toLowerCase())
   );
   return (
     <>
@@ -114,13 +111,13 @@ const Tables = () => {
           <div className="col">
             <Card className="shadow">
               <CardHeader className=" border-0 d-flex">
-                <h3 className="mb-0">Lista Estudiantes</h3>
+                <h3 className="mb-0">Lista Profesores</h3>
                 <Button color="danger" onClick={toggle} className="ml-auto">
                   Carga Masiva
                 </Button>
               </CardHeader>
               {loading ? (
-                <p className="text-center ">Cargando estudiantes...</p>
+                <p className="text-center ">Cargando profesores...</p>
               ) : (
                 <>
                   <FormGroup row>
@@ -140,7 +137,7 @@ const Tables = () => {
 
                   <DataTable
                     columns={columns}
-                    data={filteredEstudiantes}
+                    data={filteredProfesores}
                     search // Activa la búsqueda
                     pagination // Activa la paginación
                     paginationComponentOptions={{
@@ -158,7 +155,7 @@ const Tables = () => {
         </Row>
       </Container>
       <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Carga masiva de estudiantes</ModalHeader>
+        <ModalHeader toggle={toggle}>Carga masiva de profesores</ModalHeader>
         <ModalBody>
           <FormGroup>
             <Label for="exampleFile">Ingrese el archivo en formato Excel</Label>

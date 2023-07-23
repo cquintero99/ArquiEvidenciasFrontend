@@ -22,7 +22,8 @@ import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
-import Estudiantes from "views/examples/Estudiantes";
+import Estudiantes from "views/examples/Estudiantes.js";
+import Profesores from "views/examples/Profesores.js";
 
 var routes = [
   
@@ -38,7 +39,7 @@ var routes = [
     path: "/profesores",
     name: "Profesores",
     icon: "ni ni-badge  text-red ",
-    component: <Tables />,
+    component: <Profesores />,
     layout: "/director",
   },
   {
