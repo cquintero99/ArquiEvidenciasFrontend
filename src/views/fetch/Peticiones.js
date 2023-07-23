@@ -1,5 +1,5 @@
+import urlBackend from "./urlBackend";
 
-const urlBackend="http://localhost:8080/"
 //Login
 async function iniciarSesion(usuario) {
     const result = await fetch(urlBackend+"user/login", {
@@ -22,16 +22,6 @@ async function iniciarSesion(usuario) {
     });
     return result;
   }
-  async function listaEstudiantes(){
-    let token=localStorage.getItem("token")
-    const result=await fetch(urlBackend+"estudiante",{
-      method:'GET',
-      headers:{
-        "Authorization":"Bearer "+token
-      }
-    })
-    return result;
-  }
   
-  export { iniciarSesion, verificarEmail,listaEstudiantes };
+  export { iniciarSesion, verificarEmail };
   
