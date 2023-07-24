@@ -1,0 +1,23 @@
+  /* Estilos para el contenedor del input file */
+  .input-file-container {
+    text-align: center;
+  }
+
+  /* Estilos para el botón "Seleccionar archivo" */
+  .input-file {
+    background-color: red;
+    color: white;
+    border: 2px solid white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  /* Ocultar el input file original */
+  input[type="file"] {
+    display: none;
+  }
+
+  .form-text-white {
+    color: white;
+  }
