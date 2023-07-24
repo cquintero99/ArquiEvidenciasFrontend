@@ -22,8 +22,9 @@ import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
-import Estudiantes from "views/examples/Estudiantes.js";
-import Profesores from "views/examples/Profesores.js";
+import Estudiantes from "views/Director/Estudiantes";
+import Profesores from "views/Director/Profesores";
+import IndexDirector from "views/Director/Index"
 
 var routes = [
   
@@ -31,7 +32,7 @@ var routes = [
     path: "/index",
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
-    component: <Index />,
+    component: <IndexDirector />,
     layout: "/director",
   },
 
