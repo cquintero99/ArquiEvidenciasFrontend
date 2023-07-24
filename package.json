@@ -64,10 +64,11 @@
     "react-scripts": "5.0.1",
     "reactstrap": "8.10.0",
     "sass": "1.62.1",
-    "styled-components": "^6.0.5"
+    "styled-components": "^6.0.5",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+   
   },
   "peerDependencies": {
     "react": ">=16.0.0",
