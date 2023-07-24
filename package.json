@@ -1,7 +1,7 @@
 {
   "name": "argon-dashboard-react",
   "version": "1.2.3",
-  "homepage": "http://cquintero99.github.io/ArquiEvidenciasFrontend",
+  "homepage": "https://cquintero99.github.io/ArquiEvidenciasFrontend",
   "description": "React version of Argon Dashboard by Creative Tim",
   "main": "index.js",
   "repository": {
@@ -65,6 +65,9 @@
     "reactstrap": "8.10.0",
     "sass": "1.62.1",
     "styled-components": "^6.0.5"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   },
   "peerDependencies": {
     "react": ">=16.0.0",
