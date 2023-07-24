@@ -73,18 +73,10 @@ const Tables = () => {
     obtenerEstudiantes();
   }, []);
   const columns = [
-    { name: "Nombre", cell: (row) => row.usuario.nombre, sortable: true },
-    { name: "Codigo", cell: (row) => row.usuario.codigo, sortable: true },
-    {
-      name: "Correo Institucional",
-      cell: (row) => row.usuario.correo,
-      sortable: true,
-    },
-    {
-      name: "Estado Matricula",
-      cell: (row) => row.estadoMatricula,
-      sortable: true,
-    },
+    { name: "Nombre", cell: (row) => row.usuario.nombre, selector: (row) => row.usuario.nombre, sortable: true },
+    { name: "Codigo", cell: (row) => row.usuario.codigo, selector: (row) => row.usuario.codigo, sortable: true },
+    { name: "Correo Institucional", cell: (row) => row.usuario.correo, selector: (row) => row.usuario.correo, sortable: true },
+    { name: "Estado Matricula", cell: (row) => row.estadoMatricula, selector: (row) => row.estadoMatricula, sortable: true },
     {
       name: "Ver",
       cell: (row) => (
@@ -99,6 +91,7 @@ const Tables = () => {
     },
     // Puedes agregar más columnas aquí si lo deseas
   ];
+  
   //Obtengo los datos del estudiante
   const handleOpciones = (estudiante) => {
     //Abro el modal

@@ -1,7 +1,7 @@
 {
   "name": "argon-dashboard-react",
   "version": "1.2.3",
-  "homepage": "https://cquintero99.github.io/ArquiEvidenciasFrontend",
+  "homepage": "https://cquintero99.github.io/ArquiEvidenciasFrontend/build",
   "description": "React version of Argon Dashboard by Creative Tim",
   "main": "index.js",
   "repository": {
@@ -26,6 +26,7 @@
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
+    "preview": "react-scripts start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -45,6 +46,7 @@
     "not op_mini all"
   ],
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@fortawesome/fontawesome-free": "6.4.0",
     "bootstrap": "4.6.2",
     "chart.js": "2.9.4",
@@ -64,11 +66,10 @@
     "react-scripts": "5.0.1",
     "reactstrap": "8.10.0",
     "sass": "1.62.1",
-    "styled-components": "^6.0.5",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "styled-components": "^6.0.5"
   },
   "devDependencies": {
-   
+    "gh-pages": "^5.0.0"
   },
   "peerDependencies": {
     "react": ">=16.0.0",
