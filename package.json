@@ -6,7 +6,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/creativetimofficial/argon-dashboard-react.git"
+    "url": "git+https://cquintero99.github.io/ArquiEvidenciasFrontend.git"
   },
   "keywords": [
     "react",
@@ -21,7 +21,7 @@
   "author": "Creative Tim",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/creativetimofficial/argon-dashboard-react/issues"
+    "url": "https://cquintero99.github.io/ArquiEvidenciasFrontend/issues"
   },
   "scripts": {
     "predeploy": "npm run build",
