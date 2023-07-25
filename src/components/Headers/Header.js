@@ -17,7 +17,7 @@
 */
 
 // reactstrap components
-import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
+import {  Container } from "reactstrap";
 
 const Header = () => {
   return (

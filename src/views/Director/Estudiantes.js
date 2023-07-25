@@ -17,6 +17,7 @@
 */
 // reactstrap components
 import React, { useState, useEffect } from "react";
+
 import {
   Card,
   CardHeader,
@@ -35,27 +36,23 @@ import {
   Col,
 } from "reactstrap";
 // core components
-import Header from "components/Headers/Header.js";
+import Header from "components/Headers/Header";
+import "assets/css/style.css";
 import {
   listaEstudiantes,
   cargaMasiva,
-} from "views/fetch/Director/Estudiantes";
+} from "views/fetch/Director/EstudianteApi";
 import DataTable from "react-data-table-component";
-
 const Tables = () => {
   const [modal, setModal] = useState(false);
-
   const toggle = () => setModal(!modal);
-
   const [modalEstudiante, setModalEstudiente] = useState(false);
   const [estudiante, setEstudiante] = useState(null); // Estado para almacenar el estudiante seleccionado
-
   const toggleEstudiante = () => setModalEstudiente(!modalEstudiante);
-
   const [estudiantes, setEstudiantes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState("");
-
+  const [fileName, setFileName] = useState("");
   const obtenerEstudiantes = async () => {
     try {
       const response = await listaEstudiantes();
@@ -73,10 +70,30 @@ const Tables = () => {
     obtenerEstudiantes();
   }, []);
   const columns = [
-    { name: "Nombre", cell: (row) => row.usuario.nombre, selector: (row) => row.usuario.nombre, sortable: true },
-    { name: "Codigo", cell: (row) => row.usuario.codigo, selector: (row) => row.usuario.codigo, sortable: true },
-    { name: "Correo Institucional", cell: (row) => row.usuario.correo, selector: (row) => row.usuario.correo, sortable: true },
-    { name: "Estado Matricula", cell: (row) => row.estadoMatricula, selector: (row) => row.estadoMatricula, sortable: true },
+    {
+      name: "Nombre",
+      cell: (row) => row.usuario.nombre,
+      selector: (row) => row.usuario.nombre,
+      sortable: true,
+    },
+    {
+      name: "Codigo",
+      cell: (row) => row.usuario.codigo,
+      selector: (row) => row.usuario.codigo,
+      sortable: true,
+    },
+    {
+      name: "Correo Institucional",
+      cell: (row) => row.usuario.correo,
+      selector: (row) => row.usuario.correo,
+      sortable: true,
+    },
+    {
+      name: "Estado Matricula",
+      cell: (row) => row.estadoMatricula,
+      selector: (row) => row.estadoMatricula,
+      sortable: true,
+    },
     {
       name: "Ver",
       cell: (row) => (
@@ -91,20 +108,32 @@ const Tables = () => {
     },
     // Puedes agregar más columnas aquí si lo deseas
   ];
-  
+
   //Obtengo los datos del estudiante
   const handleOpciones = (estudiante) => {
     //Abro el modal
     toggleEstudiante();
     setEstudiante(estudiante);
-    // Aquí puedes manejar las acciones para el botón de opciones, como mostrar un modal o redirigir a otra página, etc.
-    console.log("Opciones del estudiante:", estudiante);
+  };
+
+  // Función para actualizar el nombre del archivo seleccionado
+  const showFileName = (event) => {
+    const input = event.target;
+    if (input.files.length > 0) {
+      setFileName(input.files[0].name);
+    } else {
+      setFileName("");
+    }
+  };
+
+  const handleModalClosed = () => {
+    setFileName("");
   };
 
   // Filtrar los datos en base al término de búsqueda
 
   const filteredEstudiantes = estudiantes.filter((estudiante) =>
-    estudiante.usuario.nombre.toLowerCase().includes(filtro.toLowerCase())
+    estudiante.usuario.codigo.toLowerCase().includes(filtro.toLowerCase())
   );
 
   //Carga masiva Estudiantes
@@ -118,7 +147,6 @@ const Tables = () => {
     cargaMasiva(formDataFile)
       .then((response) => response)
       .then((data) => {
-        console.log(data);
         toggle();
         obtenerEstudiantes();
       })
@@ -146,13 +174,13 @@ const Tables = () => {
                 <>
                   <FormGroup row>
                     <Label for="filtro" sm={2} className="text-center">
-                      Filtro
+                      Buscador
                     </Label>
                     <Col sm={9}>
                       <Input
                         type="text"
                         className=""
-                        placeholder="Buscar por nombre..."
+                        placeholder="Buscar por codigo..."
                         value={filtro}
                         onChange={(e) => setFiltro(e.target.value)}
                       />
@@ -160,11 +188,11 @@ const Tables = () => {
                   </FormGroup>
 
                   <DataTable
-                    columns={columns }
+                    columns={columns}
                     data={filteredEstudiantes}
                     striped
                     pointerOnHover
-                    highlightOnHover 
+                    highlightOnHover
                     search // Activa la búsqueda
                     pagination // Activa la paginación
                     paginationComponentOptions={{
@@ -181,36 +209,64 @@ const Tables = () => {
           </div>
         </Row>
       </Container>
-      <Modal isOpen={modal} toggle={toggle}>
-      <Form role="form" onSubmit={handelSubmitCargaMasiva}>
-        <ModalHeader toggle={toggle}><h1>Carga masiva de estudiantes</h1></ModalHeader>
-        <ModalBody>
-          
-            <FormGroup>
-              <Label for="exampleFile">
-                Ingrese el archivo en formato Excel
-              </Label>
-              <Input
-                id="fileExcel"
-                name="file"
-                type="file"
-                accept=".xls, .xlsx, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-              />
-              <FormText>Debe tene los siguientes datos.</FormText>
-            </FormGroup>
-            
-          
-        </ModalBody>
-        <ModalFooter>
-        <Button color="success" type="submit">
-              Cargar
-            </Button>
-            <Button color="secondary" onClick={toggle}>
+
+      {/* Modal carga masiva */}
+      <Modal
+        className="modal-dialog-centered modal-danger"
+        contentClassName="bg-gradient-danger"
+        isOpen={modal}
+        toggle={toggle}
+        onClosed={handleModalClosed}
+      >
+        <ModalHeader toggle={toggle}>
+          <h6 className="modal-title" id="modal-title-notification">
+            Proceso de actualización de usuarios
+          </h6>
+        </ModalHeader>
+        <Form role="form" onSubmit={handelSubmitCargaMasiva}>
+          <ModalBody>
+            <div className="py-3 text-center">
+              <i className="ni ni-cloud-upload-96 ni-3x" />
+              <h4 className="heading mt-4">Carga masiva de estudiantes</h4>
+              <p>
+                A continuación debe seleccionar el archivo excel con el listado
+                de estudiantes.
+              </p>
+            </div>
+            <div class="input-file-container">
+              <FormGroup>
+                <div className="input-file-container">
+                  <input
+                    id="fileExcel"
+                    name="file"
+                    type="file"
+                    accept=".xls, .xlsx, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    className="input-file"
+                    onChange={showFileName} // Actualizar el estado con el nombre del archivo seleccionado
+                  />
+                  <label htmlFor="fileExcel" className="input-file">
+                    Seleccionar archivo
+                  </label>
+                  {/* Mostrar el nombre del archivo seleccionado */}
+                  {fileName && <span>{fileName}</span>}
+                </div>
+                <FormText className="text-white">
+                  Archivo excel de formato xlsx.
+                </FormText>
+              </FormGroup>
+            </div>
+          </ModalBody>
+          <ModalFooter className="d-flex justify-content-between">
+            <Button className="text-white" color="link" onClick={toggle}>
               Salir
             </Button>
-        </ModalFooter>
+            <Button className="btn-white" color="default" type="submit">
+              Cargar
+            </Button>
+          </ModalFooter>
         </Form>
       </Modal>
+
       <Modal isOpen={modalEstudiante} toggle={toggleEstudiante}>
         <ModalHeader toggle={toggleEstudiante}>
           <h1>Informacion del estudiante</h1>
