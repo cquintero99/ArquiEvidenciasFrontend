@@ -24,12 +24,6 @@ import {
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  Form,
-  FormGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Input,
-  InputGroup,
   Navbar,
   Nav,
   Container,
@@ -45,8 +39,12 @@ const AdminNavbar = (props) => {
     localStorage.clear();
 
     // Redirigimos al usuario al login
-    navigate("/auth/login");
+    navigate("/auth/login" ,{ replace: true });
+    window.location.replace("/auth/login");
   };
+   //window.history.replaceState(null, "", "/auth/login");
+    //window.location.reload(); // Opcional: recargar la página para que el usuario no pueda regresar usando la caché del navegador
+  
   const [nombreUser, setNombreUser] = useState("");
 
   useEffect(() => {

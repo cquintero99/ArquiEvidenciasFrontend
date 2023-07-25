@@ -37,7 +37,7 @@ import {
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header";
-import 'assets/css/style.css'
+import "assets/css/style.css";
 import {
   listaEstudiantes,
   cargaMasiva,
@@ -52,7 +52,7 @@ const Tables = () => {
   const [estudiantes, setEstudiantes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState("");
-  const [fileName, setFileName] = useState('');
+  const [fileName, setFileName] = useState("");
   const obtenerEstudiantes = async () => {
     try {
       const response = await listaEstudiantes();
@@ -70,10 +70,30 @@ const Tables = () => {
     obtenerEstudiantes();
   }, []);
   const columns = [
-    { name: "Nombre", cell: (row) => row.usuario.nombre, selector: (row) => row.usuario.nombre, sortable: true },
-    { name: "Codigo", cell: (row) => row.usuario.codigo, selector: (row) => row.usuario.codigo, sortable: true },
-    { name: "Correo Institucional", cell: (row) => row.usuario.correo, selector: (row) => row.usuario.correo, sortable: true },
-    { name: "Estado Matricula", cell: (row) => row.estadoMatricula, selector: (row) => row.estadoMatricula, sortable: true },
+    {
+      name: "Nombre",
+      cell: (row) => row.usuario.nombre,
+      selector: (row) => row.usuario.nombre,
+      sortable: true,
+    },
+    {
+      name: "Codigo",
+      cell: (row) => row.usuario.codigo,
+      selector: (row) => row.usuario.codigo,
+      sortable: true,
+    },
+    {
+      name: "Correo Institucional",
+      cell: (row) => row.usuario.correo,
+      selector: (row) => row.usuario.correo,
+      sortable: true,
+    },
+    {
+      name: "Estado Matricula",
+      cell: (row) => row.estadoMatricula,
+      selector: (row) => row.estadoMatricula,
+      sortable: true,
+    },
     {
       name: "Ver",
       cell: (row) => (
@@ -102,12 +122,12 @@ const Tables = () => {
     if (input.files.length > 0) {
       setFileName(input.files[0].name);
     } else {
-      setFileName('');
+      setFileName("");
     }
   };
 
   const handleModalClosed = () => {
-    setFileName('');
+    setFileName("");
   };
 
   // Filtrar los datos en base al término de búsqueda
@@ -191,9 +211,13 @@ const Tables = () => {
       </Container>
 
       {/* Modal carga masiva */}
-      <Modal className="modal-dialog-centered modal-danger"
-        contentClassName="bg-gradient-danger" isOpen={modal} toggle={toggle}
-        onClosed={handleModalClosed}>
+      <Modal
+        className="modal-dialog-centered modal-danger"
+        contentClassName="bg-gradient-danger"
+        isOpen={modal}
+        toggle={toggle}
+        onClosed={handleModalClosed}
+      >
         <ModalHeader toggle={toggle}>
           <h6 className="modal-title" id="modal-title-notification">
             Proceso de actualización de usuarios
@@ -205,7 +229,8 @@ const Tables = () => {
               <i className="ni ni-cloud-upload-96 ni-3x" />
               <h4 className="heading mt-4">Carga masiva de estudiantes</h4>
               <p>
-                A continuación debe seleccionar el archivo excel con el listado de estudiantes.
+                A continuación debe seleccionar el archivo excel con el listado
+                de estudiantes.
               </p>
             </div>
             <div class="input-file-container">
@@ -225,7 +250,9 @@ const Tables = () => {
                   {/* Mostrar el nombre del archivo seleccionado */}
                   {fileName && <span>{fileName}</span>}
                 </div>
-                <FormText className="text-white">Archivo excel de formato xlsx.</FormText>
+                <FormText className="text-white">
+                  Archivo excel de formato xlsx.
+                </FormText>
               </FormGroup>
             </div>
           </ModalBody>
@@ -239,7 +266,6 @@ const Tables = () => {
           </ModalFooter>
         </Form>
       </Modal>
-
 
       <Modal isOpen={modalEstudiante} toggle={toggleEstudiante}>
         <ModalHeader toggle={toggleEstudiante}>
@@ -291,7 +317,5 @@ const Tables = () => {
     </>
   );
 };
-
-
 
 export default Tables;
