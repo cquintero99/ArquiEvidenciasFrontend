@@ -27,11 +27,15 @@ import AuthLayout from "layouts/Auth.js";
 import DirectorLayout from "layouts/Director"
 import ProfesorLayout from "layouts/Profesor"
 import EstudianteLayout from "layouts/Estudiante"
+import {VerificarToken ,VerificarRol }from "views/fetch/Seguridad/Seguridad"; // Importa el componente VerificarToken
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <BrowserRouter>
+    <VerificarToken />
+    <VerificarRol/>
     <Routes>
       <Route path="/director/*" element={<DirectorLayout />} />
       <Route path="/profesor/*" element={<ProfesorLayout />} />

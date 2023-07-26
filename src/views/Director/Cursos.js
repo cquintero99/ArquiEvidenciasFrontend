@@ -18,17 +18,27 @@ import {
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
-import { listaCursos, saveCurso } from "views/fetch/Director/CursosApi";
+import {
+  listaCursos,
+  saveCurso,
+  updateCurso,
+} from "views/fetch/Director/CursosApi";
 import DataTable from "react-data-table-component";
 
 const Tables = () => {
+  //Modal Guardar Curso
   const [modal, setModal] = useState(false);
-
+  //Abrir Modal guardr curso
   const toggle = () => setModal(!modal);
+  //Lista de Cursos
   const [cursos, setCursos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState("");
-
+  //Modal Actualizar Curso
+  const [modalCurso, setModalCurso] = useState(false);
+  //const [updateCurso, setupdateCurso] = useState(null); // Estado para almacenar el estudiante seleccionado
+  const toggleCurso = () => setModalCurso(!modalCurso);
+  //Obtener lista de cursos
   const obtenerCursos = async () => {
     try {
       const response = await listaCursos();
@@ -39,10 +49,11 @@ const Tables = () => {
       console.error("Error al obtener los Cursos:", error);
       setLoading(false);
     }
-  }
+  };
   useEffect(() => {
     obtenerCursos();
   }, []);
+  //Columnas de la Datatable
   const columns = [
     { name: "Nombre", selector: "nombre", sortable: true },
     { name: "Codigo", selector: "codigo", sortable: true },
@@ -55,22 +66,44 @@ const Tables = () => {
     {
       name: "Ver",
       cell: (row) => (
-        <i className="fa fa-eye" onClick={() => handleOpciones(row)} />
+        <p
+          className="btn bg-danger text-white"
+          onClick={() => handleOpciones(row)}
+        >
+          Actualizar
+        </p>
       ),
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,
+      width: "200px", // Ajusta el valor para cambiar el ancho de la columna
     },
     // Puedes agregar más columnas aquí si lo deseas
   ];
+
   const handleOpciones = (curso) => {
     // Aquí puedes manejar las acciones para el botón de opciones, como mostrar un modal o redirigir a otra página, etc.
+    toggleCurso();
+    setCurso(curso);
     console.log("Opciones del curso:", curso);
   };
+  const handleSubmitActualizar = (e) => {
+    e.preventDefault();
+    updateCurso(curso)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        obtenerCursos();
+        toggleCurso();
+      })
+      .catch((err) => console.log(err));
+  };
+
   // Filtrar los datos en base al término de búsqueda
   const filteredCursos = cursos.filter((curso) =>
     curso.codigo.includes(filtro.toLowerCase())
   );
+
   const [curso, setCurso] = useState({
     codigo: "",
     nombre: "",
@@ -82,26 +115,26 @@ const Tables = () => {
     tipoCurso: "",
   });
 
+  //Obtener datos del formulario guardar curso
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCurso((prevCurso) => ({ ...prevCurso, [name]: value }));
   };
-
+  //Guardo un curso
   const handleSubmit = (e) => {
     e.preventDefault();
     // Aquí puedes realizar alguna acción con los datos del curso, como enviarlos a una API, etc.
-    console.log(curso);
+
     saveCurso(curso)
-    .then(response=>response)
-    .then(data=>{
-        console.log(data)
-        obtenerCursos()
-    toggle()
-    })
-    .catch((err) => console.log(err));
-    
+      .then((response) => response)
+      .then((data) => {
+        obtenerCursos();
+        toggle();
+      })
+      .catch((err) => console.log(err));
+
     // Luego puedes resetear el formulario si lo deseas
-    /*
+
     setCurso({
       codigo: "",
       nombre: "",
@@ -112,8 +145,8 @@ const Tables = () => {
       tipoCredito: "",
       tipoCurso: "",
     });
-    */
   };
+
   return (
     <>
       <Header />
@@ -167,26 +200,152 @@ const Tables = () => {
           </div>
         </Row>
       </Container>
+      <Modal isOpen={modalCurso} toggle={toggleCurso} size="lg">
+        <ModalHeader toggle={toggleCurso}>
+          <h1>Actualizar Curso</h1>
+        </ModalHeader>
+        <ModalBody className="text-dark fw-bold  ">
+          <Form onSubmit={handleSubmitActualizar}>
+            {curso && (
+              <Row>
+                <Col md={8}>
+                  <FormGroup>
+                    <Label for="nombre">Nombre</Label>
+                    <Input
+                      type="text"
+                      name="nombre"
+                      id="nombre"
+                      value={curso.nombre}
+                      onChange={handleChange}
+                      required
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={4}>
+                  <FormGroup>
+                    <Label for="codigo">Código</Label>
+                    <Input
+                      type="number"
+                      name="codigo"
+                      id="codigo"
+                      value={curso.codigo}
+                      onChange={handleChange}
+                      required
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={4}>
+                  <FormGroup>
+                    <Label for="horaPractica">Horas Prácticas</Label>
+                    <Input
+                      type="number"
+                      name="horaPractica"
+                      id="horaPractica"
+                      value={curso.horaPractica}
+                      onChange={handleChange}
+                      required
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={4}>
+                  <FormGroup>
+                    <Label for="horaTeorica">Horas Teoricas</Label>
+                    <Input
+                      type="number"
+                      name="horaTeorica"
+                      id="horaTeorica"
+                      value={curso.horaTeorica}
+                      onChange={handleChange}
+                      required
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={4}>
+                  <FormGroup>
+                    <Label for="horaPractica">Horas Teoricas Prácticas</Label>
+                    <Input
+                      type="number"
+                      name="horaTeoricaPractica"
+                      id="horaTeoricaPractica"
+                      value={curso.horaTeoricaPractica}
+                      onChange={handleChange}
+                      required
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={4}>
+                  <FormGroup>
+                    <Label for="credito">Credito</Label>
+                    <Input
+                      type="number"
+                      name="credito"
+                      id="credito"
+                      value={curso.credito}
+                      onChange={handleChange}
+                      required
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={4}>
+                  <FormGroup>
+                    <Label for="horaTeorica">Tipo Credito</Label>
+                    <Input
+                      type="select"
+                      name="tipoCredito"
+                      id="tipoCredito"
+                      value={curso.tipoCredito}
+                      onChange={handleChange}
+                      required
+                    >
+                      <option value="">Selecciona una opción</option>
+                      <option value="1">Teórico</option>
+                      <option value="2">Práctico</option>
+                    </Input>
+                  </FormGroup>
+                </Col>
+                <Col md={4}>
+                  <FormGroup>
+                    <Label for="horaPractica">Tipo Curso</Label>
+                    <Input
+                      type="select"
+                      name="tipoCurso"
+                      id="tipoCurso"
+                      value={curso.tipoCurso}
+                      onChange={handleChange}
+                      required
+                    >
+                      <option value="">Selecciona una opción</option>
+                      <option value="1">Electivo</option>
+                      <option value="2">Obligatorio</option>
+                    </Input>
+                  </FormGroup>
+                </Col>
+                {/* Repite los FormGroup para el resto de los campos */}
+                <Col md={12}>
+                  <FormGroup className="text-center">
+                    <Button type="submit" color="success">
+                      Actualizar Curso
+                    </Button>
+                  </FormGroup>
+                </Col>
+              </Row>
+            )}
+          </Form>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={toggleCurso}>
+            Cerrar
+          </Button>
+        </ModalFooter>
+      </Modal>
+
       <Modal isOpen={modal} toggle={toggle} size="lg">
         <ModalHeader toggle={toggle}>
-          <h3>Registrar un curso</h3>
+          <h1>Registrar un curso</h1>
         </ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit}>
             <Row>
-              <Col md={4}>
-                <FormGroup>
-                  <Label for="codigo">Código</Label>
-                  <Input
-                    type="text"
-                    name="codigo"
-                    id="codigo"
-                    value={curso.codigo}
-                    onChange={handleChange}
-                    required
-                  />
-                </FormGroup>
-              </Col>
               <Col md={8}>
                 <FormGroup>
                   <Label for="nombre">Nombre</Label>
@@ -202,9 +361,22 @@ const Tables = () => {
               </Col>
               <Col md={4}>
                 <FormGroup>
+                  <Label for="codigo">Código</Label>
+                  <Input
+                    type="number"
+                    name="codigo"
+                    id="codigo"
+                    value={curso.codigo}
+                    onChange={handleChange}
+                    required
+                  />
+                </FormGroup>
+              </Col>
+              <Col md={4}>
+                <FormGroup>
                   <Label for="horaPractica">Horas Prácticas</Label>
                   <Input
-                    type="text"
+                    type="number"
                     name="horaPractica"
                     id="horaPractica"
                     value={curso.horaPractica}
@@ -217,7 +389,7 @@ const Tables = () => {
                 <FormGroup>
                   <Label for="horaTeorica">Horas Teoricas</Label>
                   <Input
-                    type="text"
+                    type="number"
                     name="horaTeorica"
                     id="horaTeorica"
                     value={curso.horaTeorica}
@@ -230,7 +402,7 @@ const Tables = () => {
                 <FormGroup>
                   <Label for="horaPractica">Horas Teoricas Prácticas</Label>
                   <Input
-                    type="text"
+                    type="number"
                     name="horaTeoricaPractica"
                     id="horaTeoricaPractica"
                     value={curso.horaTeoricaPractica}
@@ -243,7 +415,7 @@ const Tables = () => {
                 <FormGroup>
                   <Label for="credito">Credito</Label>
                   <Input
-                    type="text"
+                    type="number"
                     name="credito"
                     id="credito"
                     value={curso.credito}
@@ -256,26 +428,34 @@ const Tables = () => {
                 <FormGroup>
                   <Label for="horaTeorica">Tipo Credito</Label>
                   <Input
-                    type="text"
+                    type="select"
                     name="tipoCredito"
                     id="tipoCredito"
                     value={curso.tipoCredito}
                     onChange={handleChange}
                     required
-                  />
+                  >
+                    <option value="">Selecciona una opción</option>
+                    <option value="1">Teórico</option>
+                    <option value="2">Práctico</option>
+                  </Input>
                 </FormGroup>
               </Col>
               <Col md={4}>
                 <FormGroup>
                   <Label for="horaPractica">Tipo Curso</Label>
                   <Input
-                    type="text"
+                    type="select"
                     name="tipoCurso"
                     id="tipoCurso"
                     value={curso.tipoCurso}
                     onChange={handleChange}
                     required
-                  />
+                  >
+                    <option value="">Selecciona una opción</option>
+                    <option value="1">Electivo</option>
+                    <option value="2">Obligatorio</option>
+                  </Input>
                 </FormGroup>
               </Col>
               {/* Repite los FormGroup para el resto de los campos */}

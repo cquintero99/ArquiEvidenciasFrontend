@@ -1,7 +1,7 @@
 {
   "name": "argon-dashboard-react",
   "version": "1.2.3",
-  "homepage": "https://cquintero99.github.io/ArquiEvidenciasFrontend",
+  "homepage": "https://cquintero99.github.io/ArquiEvidenciasFrontend/",
   "description": "React version of Argon Dashboard by Creative Tim",
   "main": "index.js",
   "repository": {
