@@ -35,41 +35,25 @@ const VerificarRol = () => {
       );
       const numberRol = usuario.roles.length;
       const rol1 = usuario.roles[0].nombre.split("_")[1].toLowerCase();
-
+      const modulo=localStorage.getItem("modulo")
       if(numberRol>1){
         const rol2 = usuario.roles[1].nombre.split("_")[1].toLowerCase();
-        console.log(location.pathname.includes(rol1))
-        console.log(location.pathname.includes(rol2))  
         if(!location.pathname.includes(rol1) && !location.pathname.includes(rol2) ){
-          localStorage.clear();
-          navigate("/auth/login");
-        }else if(!location.pathname.includes(rol2) && !location.pathname.includes(rol1)){
-          localStorage.clear();
-          navigate("/auth/login");
+          // localStorage.clear();
+          navigate("/"+modulo+"/index");
         }
       }else{
         console.log(location.pathname.includes(rol1))
         if(!location.pathname.includes(rol1) && numberRol===1){
-          localStorage.clear();
-          navigate("/auth/login");
+          //localStorage.clear();
+          navigate("/"+modulo+"/index");
         }
       }
-      /*
-      if (!location.pathname.includes(rol1) && numberRol === 1) {
-        localStorage.clear();
-        navigate("/auth/login");
-      } else if (numberRol > 1) {
-        const rol2 = usuario.roles[1].nombre.split("_")[1].toLowerCase();
-        if (!location.pathname.includes(rol2)) {
-          localStorage.clear();
-          navigate("/auth/login");
-        }
-      }
-      */
+      
     }
   }, [location, navigate, tieneToken]); // Aquí se eliminan los corchetes y se agrega el arreglo de dependencias
 
-  //navigate("/" + rol + "/index");
+ 
 };
 
 function parseJwt(token) {

@@ -478,15 +478,17 @@ const Tables = () => {
                   <Button type="submit" color="success">
                     Registrar Curso
                   </Button>
-                  <Button color="secondary" onClick={toggle}>
-                    Salir
-                  </Button>
+                  
                 </FormGroup>
               </Col>
             </Row>
           </Form>
         </ModalBody>
-        <ModalFooter></ModalFooter>
+        <ModalFooter>
+        <Button color="primary" onClick={toggle}>
+                    Salir
+                  </Button>
+        </ModalFooter>
       </Modal>
     </>
   );
