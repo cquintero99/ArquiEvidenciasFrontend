@@ -66,7 +66,7 @@ const AdminNavbar = (props) => {
             className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
             to="/"
           >
-            {props.brandText}
+            INICIO
           </Link>
 
           <Nav className="align-items-center d-none d-md-flex" navbar>
@@ -76,7 +76,7 @@ const AdminNavbar = (props) => {
                   <span className="avatar avatar-sm rounded-circle">
                     <img
                       alt="..."
-                      src={require("../../assets/img/theme/team-4-800x800.jpg")}
+                      src={require("../../assets/img/user/user.png")}
                     />
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
