@@ -23,16 +23,19 @@ import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/argon-dashboard-react.scss";
 
-import AdminLayout from "layouts/Admin.js";
 import AuthLayout from "layouts/Auth.js";
 import DirectorLayout from "layouts/Director"
 import ProfesorLayout from "layouts/Profesor"
 import EstudianteLayout from "layouts/Estudiante"
+import {VerificarToken ,VerificarRol }from "views/fetch/Seguridad/Seguridad"; // Importa el componente VerificarToken
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <BrowserRouter>
+    <VerificarToken />
+    <VerificarRol/>
     <Routes>
       <Route path="/director/*" element={<DirectorLayout />} />
       <Route path="/profesor/*" element={<ProfesorLayout />} />

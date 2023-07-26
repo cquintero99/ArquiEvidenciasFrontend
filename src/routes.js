@@ -16,8 +16,8 @@
 
 */
 import Index from "views/Index.js";
-import Profile from "views/examples/Profile.js";
-import Maps from "views/examples/Maps.js";
+//import Profile from "views/examples/Profile.js";
+//import Maps from "views/examples/Maps.js";
 import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
@@ -25,6 +25,7 @@ import Icons from "views/examples/Icons.js";
 import Estudiantes from "views/Director/Estudiantes";
 import Profesores from "views/Director/Profesores";
 import IndexDirector from "views/Director/Index"
+import Cursos from "views/Director/Cursos"
 
 var routes = [
   
@@ -54,7 +55,7 @@ var routes = [
     path: "/cursos",
     name: "Cursos",
     icon: "ni ni-collection text-info",
-    component: <Tables />,
+    component: <Cursos />,
     layout: "/director",
   },
 
@@ -117,7 +118,7 @@ var routes = [
   },
 ];
 export default routes;
-{
+
   /*
  {
     path: "/icons",
@@ -150,4 +151,4 @@ export default routes;
   
 
 */
-}
+

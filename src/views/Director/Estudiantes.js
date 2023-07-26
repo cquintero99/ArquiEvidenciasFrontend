@@ -39,7 +39,7 @@ import {
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header";
-import 'assets/css/style.css'
+import "assets/css/style.css";
 import {
   listaEstudiantes,
   cargaMasiva,
@@ -57,7 +57,7 @@ const Estudiantes = () => {
   const [estudiantes, setEstudiantes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState("");
-  const [fileName, setFileName] = useState('');
+  const [fileName, setFileName] = useState("");
   const obtenerEstudiantes = async () => {
     try {
       const response = await listaEstudiantes();
@@ -146,13 +146,13 @@ const Estudiantes = () => {
     if (input.files.length > 0) {
       setFileName(input.files[0].name);
     } else {
-      setFileName('');
+      setFileName("");
     }
   };
 
   //Vaciar el file seleccionado
   const handleModalClosed = () => {
-    setFileName('');
+    setFileName("");
   };
 
   // Filtrar los datos en base al término de búsqueda
@@ -251,7 +251,8 @@ const Estudiantes = () => {
               <i className="ni ni-cloud-upload-96 ni-3x" />
               <h4 className="heading mt-4">Carga masiva de estudiantes</h4>
               <p>
-                A continuación debe seleccionar el archivo excel con el listado de estudiantes.
+                A continuación debe seleccionar el archivo excel con el listado
+                de estudiantes.
               </p>
             </div>
             <div class="input-file-container">
@@ -271,7 +272,9 @@ const Estudiantes = () => {
                   {/* Mostrar el nombre del archivo seleccionado */}
                   {fileName && <span>{fileName}</span>}
                 </div>
-                <FormText className="text-white">Archivo excel de formato xlsx.</FormText>
+                <FormText className="text-white">
+                  Archivo excel de formato xlsx.
+                </FormText>
               </FormGroup>
             </div>
           </ModalBody>
@@ -301,72 +304,78 @@ const Estudiantes = () => {
               </div>
             </CardHeader>
             <CardBody className="px-lg-3 py-lg-2">
-              <Row>
-                <Col md="4">
-                  <FormGroup>
-                    <Label for="labelEstudiante">Código</Label>
-                    <Input disabled value={estudiante.usuario.codigo} type="text" className="text-center" />
-                  </FormGroup>
-                </Col>
-                <Col md="4">
-                  <FormGroup>
-                    <Label for="selectTipoDocumento">Tipo de Documento</Label>
-                    <Input disabled type="select" id="selectTipoDocumento" value={estudiante.tipoDocumento} className="text-center">
-                      <option value="CC">Cedula Ciudadania</option>
-                      <option value="PA">Pasaporte</option>
-                      <option value="TI">Tarjeta Identidad</option>
-                      <option value="CE">Cedula extranjeria</option>
-                      <option value="Vi">Otro</option>
-                    </Input>
-                  </FormGroup>
-                </Col>
-                <Col md="4">
-                  <FormGroup>
-                    <Label for="labelEstudiante">Documento</Label>
-                    <Input disabled value={estudiante.documento} type="text" className="text-center" />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col md="6">
-                  <FormGroup>
-                    <Label for="labelEstudiante">Nombre Completo</Label>
-                    <Input disabled value={estudiante.usuario.nombre} type="text" className="text-center" />
-                  </FormGroup>
-                </Col>
-                <Col md="6">
-                  <FormGroup>
-                    <Label for="labelEstudiante">Correo Institucional</Label>
-                    <Input disabled value={estudiante.usuario.correo} type="text" className="text-center" />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col md="4">
-                  <FormGroup>
-                    <Label for="labelEstudiante">Celular</Label>
-                    <Input disabled value={estudiante.usuario.celular} type="text" className="text-center" />
-                  </FormGroup>
-                </Col>
-                <Col md="4">
-                  <FormGroup>
-                    <Label for="labelEstudiante">Estado Matricula</Label>
-                    <Input disabled value={estudiante.estadoMatricula} type="text" className="text-center" />
-                  </FormGroup>
-                </Col>
-                <Col md="2">
-                  <FormGroup>
-                    <Label for="labelEstudiante">Semestre</Label>
-                    <Input disabled value={estudiante.semestre} type="text" className="text-center" />
-                  </FormGroup>
-                </Col>
-                <Col md="2">
-                  <FormGroup>
-                    <Label for="labelEstudiante">Pensum</Label>
-                    <Input disabled value={estudiante.pensum} type="text" className="text-center" />
-                  </FormGroup>
-                </Col>
-              </Row>
+
+              {estudiante && ( // Comprueba si hay un estudiante seleccionado antes de mostrar sus detalles
+                <>
+                  <Row>
+                    <Col md="6">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Nombre Completo</Label>
+                        <Input disabled value={estudiante.usuario.nombre} type="text" className="text-center" />
+                      </FormGroup>
+                    </Col>
+                    <Col md="6">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Correo Institucional</Label>
+                        <Input disabled value={estudiante.usuario.correo} type="text" className="text-center" />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Código</Label>
+                        <Input disabled value={estudiante.usuario.codigo} type="text" className="text-center" />
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label for="selectTipoDocumento">Tipo de Documento</Label>
+                        <Input disabled type="select" id="selectTipoDocumento" value={estudiante.tipoDocumento} className="text-center">
+                          <option value="CC">Cedula Ciudadania</option>
+                          <option value="PA">Pasaporte</option>
+                          <option value="TI">Tarjeta Identidad</option>
+                          <option value="CE">Cedula extranjeria</option>
+                          <option value="Vi">Otro</option>
+                        </Input>
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Documento</Label>
+                        <Input disabled value={estudiante.documento} type="text" className="text-center" />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Celular</Label>
+                        <Input disabled value={estudiante.usuario.celular} type="text" className="text-center" />
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Estado Matricula</Label>
+                        <Input disabled value={estudiante.estadoMatricula} type="text" className="text-center" />
+                      </FormGroup>
+                    </Col>
+                    <Col md="2">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Semestre</Label>
+                        <Input disabled value={estudiante.semestre} type="text" className="text-center" />
+                      </FormGroup>
+                    </Col>
+                    <Col md="2">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Pensum</Label>
+                        <Input disabled value={estudiante.pensum} type="text" className="text-center" />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </>
+              )}
             </CardBody>
             <CardFooter>
               <div className="text-center">

@@ -14,7 +14,7 @@ import urlBackend from "../urlBackend";
   }
 
   async function cargaMasiva(file){
-    let token=localStorage.getItem("token")
+   // let token=localStorage.getItem("token")
     const result=await fetch(urlBackend+"estudiante",{
         method:'POST',
         body:(file)
