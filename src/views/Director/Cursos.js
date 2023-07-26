@@ -37,7 +37,21 @@ const Tables = () => {
   //Modal Actualizar Curso
   const [modalCurso, setModalCurso] = useState(false);
   //const [updateCurso, setupdateCurso] = useState(null); // Estado para almacenar el estudiante seleccionado
-  const toggleCurso = () => setModalCurso(!modalCurso);
+  const toggleCurso = () => {
+    // Aquí, antes de cambiar el estado de modalCurso, puedes llamar a setCurso para reiniciar el estado del objeto 'curso'
+    setCurso({
+      codigo: "",
+      nombre: "",
+      horaPractica: "",
+      horaTeorica: "",
+      horaTeoricaPractica: "",
+      credito: "",
+      tipoCredito: "",
+      tipoCurso: "",
+    });
+    // Luego, cambias el estado de modalCurso
+    setModalCurso(!modalCurso);
+  };
   //Obtener lista de cursos
   const obtenerCursos = async () => {
     try {
