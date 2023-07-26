@@ -47,6 +47,7 @@ import {
 import DataTable from "react-data-table-component";
 import { customStyles, customTheme } from "components/Datatable/DatatableCustom"
 import { Badge } from 'reactstrap';
+import Swal from 'sweetalert2'
 
 const Estudiantes = () => {
   const [modal, setModal] = useState(false);
@@ -160,7 +161,7 @@ const Estudiantes = () => {
     estudiante.usuario.codigo.toLowerCase().includes(filtro.toLowerCase())
   );
 
-  //Carga masiva Estudiantes
+  // Carga masiva Estudiantes
   const handelSubmitCargaMasiva = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -171,9 +172,24 @@ const Estudiantes = () => {
       .then((response) => response)
       .then((data) => {
         toggle();
+        Swal.fire({
+          icon: 'success',
+          title: '¡Completado!',
+          text: 'La carga de estudiantes se ha completado con éxito.',
+          showConfirmButton: false,
+          timer: 1500
+        });
         obtenerEstudiantes();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.error(err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Ha ocurrido un error.',
+          text: 'Por favor, verifica el archivo y vuelve a intentarlo.',
+          confirmButtonText: 'Aceptar'
+        });
+      });
   };
 
   return (
