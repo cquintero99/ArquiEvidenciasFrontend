@@ -23,10 +23,13 @@ import {
   updateCurso,
 } from "views/fetch/Director/CursosApi";
 import DataTable from "react-data-table-component";
-import { customStyles, customTheme } from "components/Datatable/DatatableCustom"
+import {
+  customStyles,
+  customTheme,
+} from "components/Datatable/DatatableCustom";
 import { BsPencilSquare, BsPen } from "react-icons/bs";
 import { IoMdAddCircle } from "react-icons/io";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 const Cursos = () => {
   const [modal, setModal] = useState(false);
@@ -43,7 +46,7 @@ const Cursos = () => {
     });
 
     setModal(!modal);
-  }
+  };
 
   const [cursos, setCursos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -93,7 +96,9 @@ const Cursos = () => {
     {
       name: "",
       cell: (row) => (
-        <h3 onClick={() => handleOpciones(row)}><BsPencilSquare /></h3>
+        <h3 onClick={() => handleOpciones(row)}>
+          <BsPencilSquare />
+        </h3>
       ),
       ignoreRowClick: true,
       allowOverflow: true,
@@ -112,11 +117,11 @@ const Cursos = () => {
       .then((response) => response.json())
       .then((data) => {
         Swal.fire({
-          icon: 'success',
-          title: '¡Cambios Guardados!',
-          text: 'El curso ha sido modificado con éxito.',
+          icon: "success",
+          title: "¡Cambios Guardados!",
+          text: "El curso ha sido modificado con éxito.",
           showConfirmButton: false,
-          timer: 1500
+          timer: 1500,
         });
         obtenerCursos();
         toggleCurso();
@@ -143,14 +148,14 @@ const Cursos = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === 'codigo') {
+    if (name === "codigo") {
       const regex = /^[0-9]*$/; // Expresión regular para verificar si solo contiene números del 0 al 9
       if (!regex.test(value)) {
         return;
       }
     }
 
-    if (name === 'nombre') {
+    if (name === "nombre") {
       const newValue = value.toUpperCase();
       setCurso((prevCurso) => ({ ...prevCurso, [name]: newValue }));
       return;
@@ -168,11 +173,11 @@ const Cursos = () => {
       .then((response) => response)
       .then((data) => {
         Swal.fire({
-          icon: 'success',
-          title: '¡Completado!',
-          text: 'El curso ha sido guardado con éxito.',
+          icon: "success",
+          title: "¡Completado!",
+          text: "El curso ha sido guardado con éxito.",
           showConfirmButton: false,
-          timer: 1500
+          timer: 1500,
         });
         obtenerCursos();
         toggle();
@@ -195,7 +200,7 @@ const Cursos = () => {
 
   // Función para habilitar los campos del formulario
   const habilitarCampos = () => {
-    const inputs = document.querySelectorAll('input, select'); // Obtener todos los inputs y selects dentro del formulario
+    const inputs = document.querySelectorAll("input, select"); // Obtener todos los inputs y selects dentro del formulario
     inputs.forEach((input) => (input.disabled = false)); // Habilitar cada input y select
   };
 
@@ -210,7 +215,11 @@ const Cursos = () => {
             <Card className="shadow">
               <CardHeader className=" border-0 d-flex">
                 <h3 className="mb-0">Lista Cursos</h3>
-                <Button color="danger" onClick={toggle} className="ml-auto text-white">
+                <Button
+                  color="danger"
+                  onClick={toggle}
+                  className="ml-auto text-white"
+                >
                   <IoMdAddCircle /> Nuevo Curso
                 </Button>
               </CardHeader>
@@ -233,7 +242,9 @@ const Cursos = () => {
                     </Col>
                   </FormGroup>
 
-                  <DataTable theme={customTheme} customStyles={customStyles}
+                  <DataTable
+                    theme={customTheme}
+                    customStyles={customStyles}
                     columns={columns}
                     data={filteredCursos}
                     pointerOnHover
@@ -267,17 +278,20 @@ const Cursos = () => {
         <div className="modal-body p-0">
           <Card className="bg-secondary shadow border-0">
             <CardHeader className="bg-transparent pb-0 d-flex justify-content-between">
-              <div className="text-muted text-center mt-2 mb-3" style={{ flex: 1, textAlign: 'center' }}>
+              <div
+                className="text-muted text-center mt-2 mb-3"
+                style={{ flex: 1, textAlign: "center" }}
+              >
                 <h2>Modificar Curso</h2>
               </div>
               <button
                 style={{
-                  backgroundColor: 'transparent', // Color de fondo del botón transparente
-                  border: 'none',
+                  backgroundColor: "transparent", // Color de fondo del botón transparente
+                  border: "none",
                 }}
                 onClick={habilitarCampos}
               >
-                <BsPen style={{ fontSize: '20px', color: '#333' }} />
+                <BsPen style={{ fontSize: "20px", color: "#333" }} />
               </button>
             </CardHeader>
             <Form onSubmit={handleSubmitActualizar}>
@@ -416,10 +430,13 @@ const Cursos = () => {
                     </Col>
                   </Row>
                 )}
-
               </CardBody>
               <CardFooter className="d-flex justify-content-between">
-                <Button className="btn-white" color="default" onClick={toggleCurso}>
+                <Button
+                  className="btn-white"
+                  color="default"
+                  onClick={toggleCurso}
+                >
                   Cerrar
                 </Button>
                 <Button className="text-white" color="default" type="submit">
@@ -574,7 +591,6 @@ const Cursos = () => {
                     </Col>
                   </Row>
                 )}
-
               </CardBody>
               <CardFooter className="d-flex justify-content-between">
                 <Button className="btn-white" color="default" onClick={toggle}>

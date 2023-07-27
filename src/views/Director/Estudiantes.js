@@ -45,9 +45,12 @@ import {
   cargaMasiva,
 } from "views/fetch/Director/EstudianteApi";
 import DataTable from "react-data-table-component";
-import { customStyles, customTheme } from "components/Datatable/DatatableCustom"
-import { Badge } from 'reactstrap';
-import Swal from 'sweetalert2'
+import {
+  customStyles,
+  customTheme,
+} from "components/Datatable/DatatableCustom";
+import { Badge } from "reactstrap";
+import Swal from "sweetalert2";
 
 const Estudiantes = () => {
   const [modal, setModal] = useState(false);
@@ -134,7 +137,6 @@ const Estudiantes = () => {
     },
   ];
 
-
   //Obtengo los datos del estudiante
   const handleOpciones = (estudiante) => {
     toggleEstudiante();
@@ -173,21 +175,21 @@ const Estudiantes = () => {
       .then((data) => {
         toggle();
         Swal.fire({
-          icon: 'success',
-          title: '¡Completado!',
-          text: 'La carga de estudiantes se ha completado con éxito.',
+          icon: "success",
+          title: "¡Completado!",
+          text: "La carga de estudiantes se ha completado con éxito.",
           showConfirmButton: false,
-          timer: 1500
+          timer: 1500,
         });
         obtenerEstudiantes();
       })
       .catch((err) => {
         console.error(err);
         Swal.fire({
-          icon: 'error',
-          title: 'Ha ocurrido un error.',
-          text: 'Por favor, verifica el archivo y vuelve a intentarlo.',
-          confirmButtonText: 'Aceptar'
+          icon: "error",
+          title: "Ha ocurrido un error.",
+          text: "Por favor, verifica el archivo y vuelve a intentarlo.",
+          confirmButtonText: "Aceptar",
         });
       });
   };
@@ -227,7 +229,9 @@ const Estudiantes = () => {
                       </Col>
                     </FormGroup>
                     {/* Data table react component */}
-                    <DataTable theme={customTheme} customStyles={customStyles}
+                    <DataTable
+                      theme={customTheme}
+                      customStyles={customStyles}
                       columns={columns}
                       data={filteredEstudiantes}
                       pointerOnHover
@@ -253,9 +257,13 @@ const Estudiantes = () => {
       </Container>
 
       {/* Modal carga masiva */}
-      <Modal className="modal-dialog-centered modal-danger"
-        contentClassName="bg-danger" isOpen={modal} toggle={toggle}
-        onClosed={handleModalClosed}>
+      <Modal
+        className="modal-dialog-centered modal-danger"
+        contentClassName="bg-danger"
+        isOpen={modal}
+        toggle={toggle}
+        onClosed={handleModalClosed}
+      >
         <ModalHeader toggle={toggle}>
           <h6 className="modal-title" id="modal-title-notification">
             Proceso de actualización de usuarios
@@ -282,7 +290,10 @@ const Estudiantes = () => {
                     className="input-file"
                     onChange={showFileName} // Actualizar el estado con el nombre del archivo seleccionado
                   />
-                  <label htmlFor="fileExcel" className="input-file bg-white text-dark">
+                  <label
+                    htmlFor="fileExcel"
+                    className="input-file bg-white text-dark"
+                  >
                     Seleccionar archivo
                   </label>
                   {/* Mostrar el nombre del archivo seleccionado */}
@@ -320,20 +331,31 @@ const Estudiantes = () => {
               </div>
             </CardHeader>
             <CardBody className="px-lg-3 py-lg-2">
-
               {estudiante && ( // Comprueba si hay un estudiante seleccionado antes de mostrar sus detalles
                 <>
                   <Row>
                     <Col md="6">
                       <FormGroup>
                         <Label for="labelEstudiante">Nombre Completo</Label>
-                        <Input disabled value={estudiante.usuario.nombre} type="text" className="text-center" />
+                        <Input
+                          disabled
+                          value={estudiante.usuario.nombre}
+                          type="text"
+                          className="text-center"
+                        />
                       </FormGroup>
                     </Col>
                     <Col md="6">
                       <FormGroup>
-                        <Label for="labelEstudiante">Correo Institucional</Label>
-                        <Input disabled value={estudiante.usuario.correo} type="text" className="text-center" />
+                        <Label for="labelEstudiante">
+                          Correo Institucional
+                        </Label>
+                        <Input
+                          disabled
+                          value={estudiante.usuario.correo}
+                          type="text"
+                          className="text-center"
+                        />
                       </FormGroup>
                     </Col>
                   </Row>
@@ -341,13 +363,26 @@ const Estudiantes = () => {
                     <Col md="4">
                       <FormGroup>
                         <Label for="labelEstudiante">Código</Label>
-                        <Input disabled value={estudiante.usuario.codigo} type="text" className="text-center" />
+                        <Input
+                          disabled
+                          value={estudiante.usuario.codigo}
+                          type="text"
+                          className="text-center"
+                        />
                       </FormGroup>
                     </Col>
                     <Col md="4">
                       <FormGroup>
-                        <Label for="selectTipoDocumento">Tipo de Documento</Label>
-                        <Input disabled type="select" id="selectTipoDocumento" value={estudiante.tipoDocumento} className="text-center">
+                        <Label for="selectTipoDocumento">
+                          Tipo de Documento
+                        </Label>
+                        <Input
+                          disabled
+                          type="select"
+                          id="selectTipoDocumento"
+                          value={estudiante.tipoDocumento}
+                          className="text-center"
+                        >
                           <option value="CC">Cedula Ciudadania</option>
                           <option value="PA">Pasaporte</option>
                           <option value="TI">Tarjeta Identidad</option>
@@ -359,7 +394,12 @@ const Estudiantes = () => {
                     <Col md="4">
                       <FormGroup>
                         <Label for="labelEstudiante">Documento</Label>
-                        <Input disabled value={estudiante.documento} type="text" className="text-center" />
+                        <Input
+                          disabled
+                          value={estudiante.documento}
+                          type="text"
+                          className="text-center"
+                        />
                       </FormGroup>
                     </Col>
                   </Row>
@@ -368,25 +408,45 @@ const Estudiantes = () => {
                     <Col md="4">
                       <FormGroup>
                         <Label for="labelEstudiante">Celular</Label>
-                        <Input disabled value={estudiante.usuario.celular} type="text" className="text-center" />
+                        <Input
+                          disabled
+                          value={estudiante.usuario.celular}
+                          type="text"
+                          className="text-center"
+                        />
                       </FormGroup>
                     </Col>
                     <Col md="4">
                       <FormGroup>
                         <Label for="labelEstudiante">Estado Matricula</Label>
-                        <Input disabled value={estudiante.estadoMatricula} type="text" className="text-center" />
+                        <Input
+                          disabled
+                          value={estudiante.estadoMatricula}
+                          type="text"
+                          className="text-center"
+                        />
                       </FormGroup>
                     </Col>
                     <Col md="2">
                       <FormGroup>
                         <Label for="labelEstudiante">Semestre</Label>
-                        <Input disabled value={estudiante.semestre} type="text" className="text-center" />
+                        <Input
+                          disabled
+                          value={estudiante.semestre}
+                          type="text"
+                          className="text-center"
+                        />
                       </FormGroup>
                     </Col>
                     <Col md="2">
                       <FormGroup>
                         <Label for="labelEstudiante">Pensum</Label>
-                        <Input disabled value={estudiante.pensum} type="text" className="text-center" />
+                        <Input
+                          disabled
+                          value={estudiante.pensum}
+                          type="text"
+                          className="text-center"
+                        />
                       </FormGroup>
                     </Col>
                   </Row>
@@ -408,8 +468,6 @@ const Estudiantes = () => {
           </Card>
         </div>
       </Modal>
-
-
     </>
   );
 };
