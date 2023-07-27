@@ -396,9 +396,9 @@ const Estudiantes = () => {
             <CardFooter>
               <div className="text-center">
                 <Button
-                  className="my-0"
-                  color="danger"
+                  className="my-0 text-white"
                   type="button"
+                  color="default"
                   onClick={toggleEstudiante}
                 >
                   Cerrar
