@@ -26,6 +26,7 @@ import Estudiantes from "views/Director/Estudiantes";
 import Profesores from "views/Director/Profesores";
 import IndexDirector from "views/Director/Index"
 import Cursos from "views/Director/Cursos"
+import Grupos from "views/Director/Grupos"
 
 var routes = [
   
@@ -63,7 +64,7 @@ var routes = [
     path: "/grupos",
     name: "Grupos",
     icon: "ni ni-books text-yellow",
-    component: <Tables />,
+    component: <Grupos />,
     layout: "/director",
   },
   {
