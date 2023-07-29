@@ -86,11 +86,11 @@ const Cursos = () => {
 
   //Columnas de la Datatable
   const columns = [
-    { name: "Codigo", selector: "codigo", sortable: true },
-    { name: "Nombre", selector: "nombre", sortable: true },
+    { name: "Codigo", selector: (row) => row.codigo, sortable: true },
+    { name: "Nombre", selector: (row) => row.nombre, sortable: true },
     {
       name: "Creditos",
-      selector: "credito",
+      selector: (row) => row.credito,
       sortable: true,
     },
     {
@@ -105,6 +105,7 @@ const Cursos = () => {
       button: true,
     },
   ];
+
 
   const handleOpciones = (curso) => {
     // Aquí puedes manejar las acciones para el botón de opciones, como mostrar un modal o redirigir a otra página, etc.
