@@ -28,6 +28,7 @@ import IndexDirector from "views/Director/Index"
 import Cursos from "views/Director/Cursos"
 import Grupos from "views/Director/Grupos"
 import GruposProfesor from "views/Profesor/Grupos"
+import GrupoView from "views/Profesor/GrupoView"
 
 var routes = [
   
@@ -116,6 +117,11 @@ var routes = [
     icon: "ni ni-circle-08 text-pink",
     component: <Register />,
     layout: "/auth",
+  },
+  {
+    path: "/grupos/view/:id",
+    component: <GrupoView />,
+    layout: "/profesor",
   },
 ];
 export default routes;
