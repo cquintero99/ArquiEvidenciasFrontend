@@ -17,12 +17,14 @@ import {
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
+import { listaCursos } from "views/fetch/Director/CursosApi";
 import {
-  listaCursos,
-  saveCurso,
-  updateCurso,
-} from "views/fetch/Director/CursosApi";
-import { listaGrupos } from "views/fetch/Director/GrupoApi";
+  listaGrupos,
+  saveGrupo,
+  updateGrupo,
+} from "views/fetch/Director/GrupoApi";
+
+import { listaProfesores } from "../fetch/Director/ProfesorApi";
 import DataTable from "react-data-table-component";
 import {
   customStyles,
@@ -32,16 +34,53 @@ import { BsPencilSquare, BsPen } from "react-icons/bs";
 import { IoMdAddCircle } from "react-icons/io";
 import Swal from "sweetalert2";
 
-const Cursos = () => {
+const Grupos = () => {
   const [modal, setModal] = useState(false);
   const toggle = () => {
+    setGrupo({
+      id: "",
+      descripcion: "",
+      anioAcademico: "",
+      semestreAcademico: "",
+      codigoGrupo: "",
+      profesor: {
+        id: "",
+        tipoVinculacion: "",
+        departamento: "",
+        correoPersonal: "",
+        usuario: {
+          id: "",
+          nombre: "",
+          codigo: "",
+          celular: "",
+          correoInstitucional: "",
+          estado: "",
+          correoConfirmado: "",
+          fechaRegistro: "",
+        },
+      },
+      curso: {
+        id: "",
+        codigo: "",
+        nombre: "",
+        horaPractica: "",
+        horaTeorica: "",
+        horaTeoricaPractica: "",
+        credito: "",
+        tipoCredito: "",
+        tipoCurso: "",
+      },
+      microcurriculo: "",
+    });
     setModal(!modal);
   };
 
   const [grupos, setGrupos] = useState([]);
+  const [profesores, setProfesores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState("");
-  const [modalCurso, setModalCurso] = useState(false);
+  const [modalGrupo, setModalGrupo] = useState(false);
+  const [cursos, setCursos] = useState([]);
   const [grupo, setGrupo] = useState({
     id: "",
     descripcion: "",
@@ -77,18 +116,18 @@ const Cursos = () => {
     },
     microcurriculo: "",
   });
-  const toggleCurso = () => {
+
+  const toggleGrupo = () => {
     // Aquí, antes de cambiar el estado de modalCurso, puedes llamar a setCurso para reiniciar el estado del objeto 'curso'
 
     // Luego, cambias el estado de modalCurso
-    setModalCurso(!modalCurso);
+    setModalGrupo(!modalGrupo);
   };
   //Obtener lista de cursos
   const obtenerGrupos = async () => {
     try {
       const response = await listaGrupos();
       const data = await response.json();
-      console.log(data);
       setGrupos(data);
       setLoading(false);
     } catch (error) {
@@ -96,27 +135,63 @@ const Cursos = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     obtenerGrupos();
   }, []);
-
+  //Obtener lista de profesores
+  const obtenerProfesores = async () => {
+    try {
+      const response = await listaProfesores();
+      const data = await response.json();
+      setProfesores(data);
+    } catch (error) {
+      console.error("Error al obtener profesores:", error);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    obtenerProfesores();
+  }, []);
+  //Obtener lista de cursos
+  const obtenerCursos = async () => {
+    try {
+      const response = await listaCursos();
+      const data = await response.json();
+      setCursos(data);
+    } catch (error) {
+      console.error("Error al obtener los Cursos:", error);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    obtenerCursos();
+  }, []);
   //Columnas de la Datatable
   const columns = [
-    { name: "Descripcion", selector: "descripcion", sortable: true },
-    { name: "Profesor", selector: "profesor.usuario.codigo", sortable: true },
-    { name: "Año ",
-     selector: (row)=>`${row.anioAcademico} - ${row.semestreAcademico}`, 
-     sortable: true },
     {
-      name: "Curso",
-      selector: "curso.nombre",
+      name: "Código",
+      selector: (row) => `${row.curso.codigo}-${row.codigoGrupo}`,
       sortable: true,
     },
     {
-        name: "Código",
-        selector: (row) => `${row.curso.codigo} - ${row.codigoGrupo}`,
-        sortable: true,
-      },
+      name: "Curso",
+      selector: (row) => row.curso.nombre,
+      sortable: true,
+    },
+
+    { name: "Descripcion", selector: (row) => row.descripcion, sortable: true },
+    {
+      name: "Profesor",
+      selector: (row) => row.profesor.usuario.codigo,
+      sortable: true,
+    },
+    {
+      name: "Año ",
+      selector: (row) => `${row.anioAcademico} - ${row.semestreAcademico}`,
+      sortable: true,
+    },
+
     {
       name: "",
       cell: (row) => (
@@ -132,9 +207,9 @@ const Cursos = () => {
 
   const handleOpciones = (grupo) => {
     // Aquí puedes manejar las acciones para el botón de opciones, como mostrar un modal o redirigir a otra página, etc.
-    toggleCurso();
-    // setCurso(curso);
-    console.log(grupo)
+    toggleGrupo();
+    setGrupo(grupo);
+    console.log(grupo);
   };
   //   const handleSubmitActualizar = (e) => {
   //     e.preventDefault();
@@ -159,72 +234,85 @@ const Cursos = () => {
     const filtroLower = filtro.toLowerCase();
     const codigoCurso = grupo.curso.codigo.toLowerCase();
     const codigoGrupo = grupo.codigoGrupo.toLowerCase();
-  
-    const searchString = codigoCurso +"-"+codigoGrupo;
-    return  searchString.includes(filtroLower)
-    
+
+    const searchString = codigoCurso + "-" + codigoGrupo;
+    return searchString.includes(filtroLower);
   });
 
-  
-
-  //   const handleChange = (e) => {
-  //     const { name, value } = e.target;
-
-  //     if (name === "codigo") {
-  //       const regex = /^[0-9]*$/; // Expresión regular para verificar si solo contiene números del 0 al 9
-  //       if (!regex.test(value)) {
-  //         return;
-  //       }
-  //     }
-
-  //     if (name === "nombre") {
-  //       const newValue = value.toUpperCase();
-  //       setCurso((prevCurso) => ({ ...prevCurso, [name]: newValue }));
-  //       return;
-  //     }
-
-  //     setCurso((prevCurso) => ({ ...prevCurso, [name]: value }));
-  //   };
-
   //Guardo un curso
-  //   const handleSubmit = (e) => {
-  //     e.preventDefault();
-  //     // Aquí puedes realizar alguna acción con los datos del curso, como enviarlos a una API, etc.
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(grupo);
+    saveGrupo(grupo)
+      .then((response) => response.json())
+      .then((data) => {
+        toggle();
+        console.log(data);
+        Swal.fire({
+          icon: "success",
+          title: "¡Completado!",
+          text: "El grupo ha sido guardado con éxito.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        obtenerGrupos();
+      })
+      .catch((error) => {
+        console.log(error);
+        toggle();
+        Swal.fire({
+          icon: "error",
+          title: "¡Upps!",
+          text: "El grupo no se puedo guardar.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      });
+    // Aquí puedes realizar alguna acción con los datos del curso, como enviarlos a una API, etc.
 
-  //     saveCurso(curso)
-  //       .then((response) => response)
-  //       .then((data) => {
-  //         Swal.fire({
-  //           icon: "success",
-  //           title: "¡Completado!",
-  //           text: "El curso ha sido guardado con éxito.",
-  //           showConfirmButton: false,
-  //           timer: 1500,
-  //         });
-  //         obtenerCursos();
-  //         toggle();
-  //       })
-  //       .catch((err) => console.log(err));
+    // Luego puedes resetear el formulario si lo deseas
+  };
 
-  //     // Luego puedes resetear el formulario si lo deseas
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setGrupo((prevCurso) => ({ ...prevCurso, [name]: value }));
+  };
 
-  //     setCurso({
-  //       codigo: "",
-  //       nombre: "",
-  //       horaPractica: "",
-  //       horaTeorica: "",
-  //       horaTeoricaPractica: "",
-  //       credito: "",
-  //       tipoCredito: "",
-  //       tipoCurso: "",
-  //     });
-  //   };
+  const handleSubmitActualizar = (e) => {
+    e.preventDefault();
+
+    updateGrupo(grupo)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        Swal.fire({
+          icon: "success",
+          title: "¡Cambios Guardados!",
+          text: "El grupo ha sido modificado con éxito.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        toggleGrupo();
+        obtenerGrupos();
+      })
+      .catch((error) => {
+        console.log(error);
+        toggleGrupo();
+        Swal.fire({
+          icon: "error",
+          title: "¡Upps!",
+          text: "El grupo no  ha sido modificado .",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      });
+  };
 
   // Función para habilitar los campos del formulario
-  //   const habilitarCampos = () => {
-  //     const inputs = document.querySelectorAll("input, select"); // Obtener todos los inputs y selects dentro del formulario
-  //     inputs.forEach((input) => (input.disabled = false)); // Habilitar cada input y select
-  //   };
+  const habilitarCampos = () => {
+    const inputs = document.querySelectorAll("input, select"); // Obtener todos los inputs y selects dentro del formulario
+    inputs.forEach((input) => (input.disabled = false)); // Habilitar cada input y select
+  };
 
   return (
     <>
@@ -239,7 +327,7 @@ const Cursos = () => {
                 <h3 className="mb-0">Lista Grupos</h3>
                 <Button
                   color="danger"
-                  //   onClick={toggle}
+                  onClick={toggle}
                   className="ml-auto text-white"
                 >
                   <IoMdAddCircle /> Nuevo Grupo
@@ -251,7 +339,7 @@ const Cursos = () => {
                 <>
                   <FormGroup row>
                     <Label for="filtro" sm={2} className="text-center">
-                      Buscar
+                      Filtro
                     </Label>
                     <Col sm={9}>
                       <Input
@@ -289,13 +377,12 @@ const Cursos = () => {
           </div>
         </Row>
       </Container>
-
-      {/* Modal editar curso */}
-      {/* <Modal
+      {/* Modal editar Grupo */}
+      <Modal
         className="modal-dialog-centered"
         size="lg"
-        isOpen={modalCurso}
-        toggle={toggleCurso}
+        isOpen={modalGrupo}
+        toggle={toggleGrupo}
       >
         <div className="modal-body p-0">
           <Card className="bg-secondary shadow border-0">
@@ -304,7 +391,7 @@ const Cursos = () => {
                 className="text-muted text-center mt-2 mb-3"
                 style={{ flex: 1, textAlign: "center" }}
               >
-                <h2>Modificar Curso</h2>
+                <h2>Modificar Grupo</h2>
               </div>
               <button
                 style={{
@@ -318,146 +405,119 @@ const Cursos = () => {
             </CardHeader>
             <Form onSubmit={handleSubmitActualizar}>
               <CardBody className="px-lg-3 py-lg-2">
-                {curso && (
-                  <Row>
-                    <Col md={2}>
-                      <FormGroup>
-                        <Label for="codigo">Código</Label>
-                        <Input
-                          type="text"
-                          name="codigo"
-                          id="codigo"
-                          maxLength={7}
-                          value={curso.codigo}
-                          onChange={handleChange}
-                          required
-                          disabled
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md={10}>
-                      <FormGroup>
-                        <Label for="nombre">Nombre</Label>
-                        <Input
-                          type="text"
-                          name="nombre"
-                          id="nombre"
-                          value={curso.nombre}
-                          onChange={handleChange}
-                          maxLength={255}
-                          required
-                          disabled
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
-                        <Label for="horaTeorica">Tipo Credito</Label>
-                        <Input
-                          type="select"
-                          name="tipoCredito"
-                          id="tipoCredito"
-                          value={curso.tipoCredito}
-                          onChange={handleChange}
-                          required
-                          disabled
-                        >
-                          <option value="">Seleccionar...</option>
-                          <option value="1">TEÓRICO</option>
-                          <option value="2">PRÁCTICO</option>
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
-                        <Label for="horaPractica">Tipo Curso</Label>
-                        <Input
-                          type="select"
-                          name="tipoCurso"
-                          id="tipoCurso"
-                          value={curso.tipoCurso}
-                          onChange={handleChange}
-                          required
-                          disabled
-                        >
-                          <option value="">Seleccionar...</option>
-                          <option value="1">ELECTIVO</option>
-                          <option value="2">OBLIGATORIO</option>
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
-                        <Label for="horaPractica">Horas Prácticas</Label>
-                        <Input
-                          type="number"
-                          name="horaPractica"
-                          id="horaPractica"
-                          value={curso.horaPractica}
-                          onChange={handleChange}
-                          max={20}
-                          min={1}
-                          required
-                          disabled
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
-                        <Label for="horaTeorica">Horas Teoricas</Label>
-                        <Input
-                          type="number"
-                          name="horaTeorica"
-                          id="horaTeorica"
-                          value={curso.horaTeorica}
-                          onChange={handleChange}
-                          max={20}
-                          min={1}
-                          required
-                          disabled
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
-                        <Label for="horaPractica">H Teoricas Prácticas</Label>
-                        <Input
-                          type="number"
-                          name="horaTeoricaPractica"
-                          id="horaTeoricaPractica"
-                          value={curso.horaTeoricaPractica}
-                          onChange={handleChange}
-                          max={20}
-                          min={1}
-                          required
-                          disabled
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md={2}>
-                      <FormGroup>
-                        <Label for="credito">Creditos</Label>
-                        <Input
-                          type="number"
-                          name="credito"
-                          id="credito"
-                          value={curso.credito}
-                          max={9}
-                          min={1}
-                          onChange={handleChange}
-                          required
-                          disabled
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
+                {grupo && (
+                  <>
+                    <Row>
+                      <Col md={12}>
+                        <FormGroup>
+                          <Label for="descripcion">Descripcion</Label>
+                          <Input
+                            type="text"
+                            name="descripcion"
+                            id="descripcion"
+                            value={grupo.descripcion}
+                            onChange={handleChange}
+                            disabled
+                            required
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col md={6}>
+                        <FormGroup>
+                          <Label for="anioAcademico">Año Academico</Label>
+                          <Input
+                            type="number"
+                            name="anioAcademico"
+                            id="anioAcademico"
+                            value={grupo.anioAcademico}
+                            onChange={handleChange}
+                            disabled
+                            required
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col md={6}>
+                        <FormGroup>
+                          <Label for="semestreAcademico">
+                            Semestre Academico
+                          </Label>
+                          <Input
+                            type="number"
+                            name="semestreAcademico"
+                            id="semestreAcademico"
+                            value={grupo.semestreAcademico}
+                            onChange={handleChange}
+                            disabled
+                            required
+                          />
+                        </FormGroup>
+                      </Col>
+
+                      <Col md={6}>
+                        <FormGroup>
+                          <Label for="profesor">Profesor</Label>
+                          <Input
+                            type="select"
+                            name="profesor"
+                            id="profesor"
+                            value={grupo.profesor.id}
+                            onChange={(e) =>
+                              setGrupo({
+                                ...grupo,
+                                profesor: {
+                                  ...grupo.profesor,
+                                  id: e.target.value,
+                                },
+                              })
+                            }
+                            disabled
+                            required
+                          >
+                            <option value="">Selecciona un profesor...</option>
+                            {profesores.map((profesor) => (
+                              <option key={profesor.id} value={profesor.id}>
+                                {profesor.usuario.codigo} -{" "}
+                                {profesor.usuario.nombre}
+                              </option>
+                            ))}
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                      <Col md={6}>
+                        <FormGroup>
+                          <Label for="horaPractica">Curso</Label>
+                          <Input
+                            type="select"
+                            name="curso"
+                            id="curso"
+                            value={grupo.curso.id}
+                            onChange={(e) =>
+                              setGrupo({
+                                ...grupo,
+                                curso: { ...grupo.curso, id: e.target.value },
+                              })
+                            }
+                            disabled
+                            required
+                          >
+                            <option value="">Selecciona un curso...</option>
+                            {cursos.map((curso) => (
+                              <option key={curso.id} value={curso.id}>
+                                {curso.codigo} - {curso.nombre}
+                              </option>
+                            ))}
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </>
                 )}
               </CardBody>
               <CardFooter className="d-flex justify-content-between">
                 <Button
                   className="btn-white"
                   color="default"
-                  onClick={toggleCurso}
+                  onClick={toggleGrupo}
                 >
                   Cerrar
                 </Button>
@@ -468,10 +528,9 @@ const Cursos = () => {
             </Form>
           </Card>
         </div>
-      </Modal> */}
-
-      {/* Modal agregar curso */}
-      {/* <Modal
+      </Modal>
+      {/* Modal agregar Grupo */}
+      <Modal
         className="modal-dialog-centered"
         size="lg"
         isOpen={modal}
@@ -481,137 +540,113 @@ const Cursos = () => {
           <Card className="bg-secondary shadow border-0">
             <CardHeader className="bg-transparent pb-0">
               <div className="text-muted text-center mt-2 mb-3">
-                <h2>Nuevo Curso</h2>
+                <h2>Nuevo Grupo</h2>
               </div>
             </CardHeader>
 
             <Form onSubmit={handleSubmit}>
               <CardBody className="px-lg-3 py-lg-2">
-                {curso && (
-                  <Row>
-                    <Col md={2}>
-                      <FormGroup>
-                        <Label for="codigo">Código</Label>
-                        <Input
-                          type="text"
-                          name="codigo"
-                          id="codigo"
-                          maxLength={7}
-                          value={curso.codigo}
-                          onChange={handleChange}
-                          required
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md={10}>
-                      <FormGroup>
-                        <Label for="nombre">Nombre</Label>
-                        <Input
-                          type="text"
-                          name="nombre"
-                          id="nombre"
-                          value={curso.nombre}
-                          onChange={handleChange}
-                          maxLength={255}
-                          required
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
-                        <Label for="horaTeorica">Tipo Credito</Label>
-                        <Input
-                          type="select"
-                          name="tipoCredito"
-                          id="tipoCredito"
-                          value={curso.tipoCredito}
-                          onChange={handleChange}
-                          required
-                        >
-                          <option value="">Seleccionar...</option>
-                          <option value="1">TEÓRICO</option>
-                          <option value="2">PRÁCTICO</option>
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
-                        <Label for="horaPractica">Tipo Curso</Label>
-                        <Input
-                          type="select"
-                          name="tipoCurso"
-                          id="tipoCurso"
-                          value={curso.tipoCurso}
-                          onChange={handleChange}
-                          required
-                        >
-                          <option value="">Seleccionar...</option>
-                          <option value="1">ELECTIVO</option>
-                          <option value="2">OBLIGATORIO</option>
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
-                        <Label for="horaPractica">Horas Prácticas</Label>
-                        <Input
-                          type="number"
-                          name="horaPractica"
-                          id="horaPractica"
-                          value={curso.horaPractica}
-                          onChange={handleChange}
-                          max={20}
-                          min={1}
-                          required
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
-                        <Label for="horaTeorica">Horas Teoricas</Label>
-                        <Input
-                          type="number"
-                          name="horaTeorica"
-                          id="horaTeorica"
-                          value={curso.horaTeorica}
-                          onChange={handleChange}
-                          max={20}
-                          min={1}
-                          required
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md={3}>
-                      <FormGroup>
-                        <Label for="horaPractica">H Teoricas Prácticas</Label>
-                        <Input
-                          type="number"
-                          name="horaTeoricaPractica"
-                          id="horaTeoricaPractica"
-                          value={curso.horaTeoricaPractica}
-                          onChange={handleChange}
-                          max={20}
-                          min={1}
-                          required
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col md={2}>
-                      <FormGroup>
-                        <Label for="credito">Creditos</Label>
-                        <Input
-                          type="number"
-                          name="credito"
-                          id="credito"
-                          value={curso.credito}
-                          max={9}
-                          min={1}
-                          onChange={handleChange}
-                          required
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
+                {grupo && (
+                  <>
+                    <Row>
+                      <Col md={12}>
+                        <FormGroup>
+                          <Label for="descripcion">Descripcion</Label>
+                          <Input
+                            type="text"
+                            name="descripcion"
+                            id="descripcion"
+                            value={grupo.descripcion}
+                            onChange={handleChange}
+                            required
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col md={6}>
+                        <FormGroup>
+                          <Label for="anioAcademico">Año Academico</Label>
+                          <Input
+                            type="number"
+                            name="anioAcademico"
+                            id="anioAcademico"
+                            value={grupo.anioAcademico}
+                            onChange={handleChange}
+                            required
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col md={6}>
+                        <FormGroup>
+                          <Label for="semestreAcademico">
+                            Semestre Academico
+                          </Label>
+                          <Input
+                            type="number"
+                            name="semestreAcademico"
+                            id="semestreAcademico"
+                            value={grupo.semestreAcademico}
+                            onChange={handleChange}
+                            required
+                          />
+                        </FormGroup>
+                      </Col>
+
+                      <Col md={6}>
+                        <FormGroup>
+                          <Label for="profesor">Profesor</Label>
+                          <Input
+                            type="select"
+                            name="profesor"
+                            id="profesor"
+                            value={grupo.profesor.id}
+                            onChange={(e) =>
+                              setGrupo({
+                                ...grupo,
+                                profesor: {
+                                  ...grupo.profesor,
+                                  id: e.target.value,
+                                },
+                              })
+                            }
+                            required
+                          >
+                            <option value="">Selecciona un profesor...</option>
+                            {profesores.map((profesor) => (
+                              <option key={profesor.id} value={profesor.id}>
+                                {profesor.usuario.codigo} -{" "}
+                                {profesor.usuario.nombre}
+                              </option>
+                            ))}
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                      <Col md={6}>
+                        <FormGroup>
+                          <Label for="horaPractica">Curso</Label>
+                          <Input
+                            type="select"
+                            name="curso"
+                            id="curso"
+                            value={grupo.curso.id}
+                            onChange={(e) =>
+                              setGrupo({
+                                ...grupo,
+                                curso: { ...grupo.curso, id: e.target.value },
+                              })
+                            }
+                            required
+                          >
+                            <option value="">Selecciona un curso...</option>
+                            {cursos.map((curso) => (
+                              <option key={curso.id} value={curso.id}>
+                                {curso.codigo} - {curso.nombre}
+                              </option>
+                            ))}
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </>
                 )}
               </CardBody>
               <CardFooter className="d-flex justify-content-between">
@@ -625,9 +660,9 @@ const Cursos = () => {
             </Form>
           </Card>
         </div>
-      </Modal> */}
+      </Modal>
     </>
   );
 };
 
-export default Cursos;
+export default Grupos;

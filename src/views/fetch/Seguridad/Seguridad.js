@@ -43,7 +43,6 @@ const VerificarRol = () => {
           navigate("/"+modulo+"/index");
         }
       }else{
-        console.log(location.pathname.includes(rol1))
         if(!location.pathname.includes(rol1) && numberRol===1){
           //localStorage.clear();
           navigate("/"+modulo+"/index");

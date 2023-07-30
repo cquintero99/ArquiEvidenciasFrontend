@@ -86,11 +86,11 @@ const Cursos = () => {
 
   //Columnas de la Datatable
   const columns = [
-    { name: "Codigo", selector: "codigo", sortable: true },
-    { name: "Nombre", selector: "nombre", sortable: true },
+    { name: "Codigo", selector:(row)=>row.codigo  , sortable: true },
+    { name: "Nombre", selector:(row)=>row.nombre, sortable: true },
     {
       name: "Creditos",
-      selector: "credito",
+      selector: (row)=>row.credito,
       sortable: true,
     },
     {
@@ -249,6 +249,8 @@ const Cursos = () => {
                     data={filteredCursos}
                     pointerOnHover
                     responsive
+                    sortActive
+                    sortDirection
                     highlightOnHover
                     search // Activa la búsqueda
                     noDataComponent="No se encontraron registros para mostrar."
