@@ -310,7 +310,7 @@ const Grupos = () => {
 
   // Función para habilitar los campos del formulario
   const habilitarCampos = () => {
-    const inputs = document.querySelectorAll("input, select"); // Obtener todos los inputs y selects dentro del formulario
+    const inputs = document.querySelectorAll("input, select, textarea"); // Obtener todos los inputs y selects dentro del formulario
     inputs.forEach((input) => (input.disabled = false)); // Habilitar cada input y select
   };
 
@@ -410,49 +410,63 @@ const Grupos = () => {
                     <Row>
                       <Col md={12}>
                         <FormGroup>
-                          <Label for="descripcion">Descripcion</Label>
-                          <Input
-                            type="text"
-                            name="descripcion"
-                            id="descripcion"
-                            value={grupo.descripcion}
-                            onChange={handleChange}
-                            disabled
-                            required
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col md={6}>
-                        <FormGroup>
-                          <Label for="anioAcademico">Año Academico</Label>
-                          <Input
-                            type="number"
-                            name="anioAcademico"
-                            id="anioAcademico"
-                            value={grupo.anioAcademico}
-                            onChange={handleChange}
-                            disabled
-                            required
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col md={6}>
-                        <FormGroup>
-                          <Label for="semestreAcademico">
-                            Semestre Academico
+                          <Label for="exampleText">
+                            Descripción
                           </Label>
                           <Input
-                            type="number"
-                            name="semestreAcademico"
-                            id="semestreAcademico"
-                            value={grupo.semestreAcademico}
+                            id="descripcion"
+                            name="descripcion"
+                            type="textarea"
+                            value={grupo.descripcion}
                             onChange={handleChange}
+                            maxLength={255}
+                            rows="3"
                             disabled
-                            required
                           />
+                        </FormGroup>
+                      </Col>
+                      <Col md="3">
+                        <FormGroup>
+                          <Label for="anioAcademico">Año Académico</Label>
+                          <select
+                            name="anioAcademico"
+                            id="anioAcademico"
+                            class="form-control"
+                            value={grupo.anioAcademico}
+                            required
+                            disabled
+                          >
+                            <option value="">Seleccionar...</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                            <option value="2028">2028</option>
+                            <option value="2029">2029</option>
+                            <option value="2030">2030</option>
+                          </select>
                         </FormGroup>
                       </Col>
 
+                      <Col md="3">
+                        <FormGroup>
+                          <Label for="semestreAcademico">Semestre Académico</Label>
+                          <select
+                            name="semestreAcademico"
+                            id="semestreAcademico"
+                            class="form-control"
+                            value={grupo.semestreAcademico}
+                            onChange={handleChange}
+                            required
+                            disabled
+                          >
+                            <option value="">Seleccionar...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                          </select>
+                        </FormGroup>
+                      </Col>
                       <Col md={6}>
                         <FormGroup>
                           <Label for="profesor">Profesor</Label>
@@ -473,7 +487,7 @@ const Grupos = () => {
                             disabled
                             required
                           >
-                            <option value="">Selecciona un profesor...</option>
+                            <option value="">Seleccionar...</option>
                             {profesores.map((profesor) => (
                               <option key={profesor.id} value={profesor.id}>
                                 {profesor.usuario.codigo} -{" "}
@@ -483,7 +497,7 @@ const Grupos = () => {
                           </Input>
                         </FormGroup>
                       </Col>
-                      <Col md={6}>
+                      <Col md={12}>
                         <FormGroup>
                           <Label for="horaPractica">Curso</Label>
                           <Input
@@ -500,7 +514,7 @@ const Grupos = () => {
                             disabled
                             required
                           >
-                            <option value="">Selecciona un curso...</option>
+                            <option value="">Seleccionar...</option>
                             {cursos.map((curso) => (
                               <option key={curso.id} value={curso.id}>
                                 {curso.codigo} - {curso.nombre}
@@ -551,46 +565,59 @@ const Grupos = () => {
                     <Row>
                       <Col md={12}>
                         <FormGroup>
-                          <Label for="descripcion">Descripcion</Label>
-                          <Input
-                            type="text"
-                            name="descripcion"
-                            id="descripcion"
-                            value={grupo.descripcion}
-                            onChange={handleChange}
-                            required
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col md={6}>
-                        <FormGroup>
-                          <Label for="anioAcademico">Año Academico</Label>
-                          <Input
-                            type="number"
-                            name="anioAcademico"
-                            id="anioAcademico"
-                            value={grupo.anioAcademico}
-                            onChange={handleChange}
-                            required
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col md={6}>
-                        <FormGroup>
-                          <Label for="semestreAcademico">
-                            Semestre Academico
+                          <Label for="exampleText">
+                            Descripción
                           </Label>
                           <Input
-                            type="number"
-                            name="semestreAcademico"
-                            id="semestreAcademico"
-                            value={grupo.semestreAcademico}
+                            id="descripcion"
+                            name="descripcion"
+                            type="textarea"
+                            value={grupo.descripcion}
                             onChange={handleChange}
-                            required
+                            maxLength={255}
+                            rows="3"
                           />
+                        </FormGroup>
+                      </Col>
+                      <Col md="3">
+                        <FormGroup>
+                          <Label for="anioAcademico">Año Académico</Label>
+                          <select
+                            name="anioAcademico"
+                            id="anioAcademico"
+                            class="form-control"
+                            required
+                          >
+                            <option value="">Seleccionar...</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                            <option value="2028">2028</option>
+                            <option value="2029">2029</option>
+                            <option value="2030">2030</option>
+                          </select>
                         </FormGroup>
                       </Col>
 
+                      <Col md="3">
+                        <FormGroup>
+                          <Label for="semestreAcademico">Semestre Académico</Label>
+                          <select
+                            name="semestreAcademico"
+                            id="semestreAcademico"
+                            class="form-control"
+                            value={grupo.semestreAcademico}
+                            onChange={handleChange}
+                            required
+                          >
+                            <option value="">Seleccionar...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                          </select>
+                        </FormGroup>
+                      </Col>
                       <Col md={6}>
                         <FormGroup>
                           <Label for="profesor">Profesor</Label>
@@ -610,7 +637,7 @@ const Grupos = () => {
                             }
                             required
                           >
-                            <option value="">Selecciona un profesor...</option>
+                            <option value="">Seleccionar...</option>
                             {profesores.map((profesor) => (
                               <option key={profesor.id} value={profesor.id}>
                                 {profesor.usuario.codigo} -{" "}
@@ -620,7 +647,7 @@ const Grupos = () => {
                           </Input>
                         </FormGroup>
                       </Col>
-                      <Col md={6}>
+                      <Col md={12}>
                         <FormGroup>
                           <Label for="horaPractica">Curso</Label>
                           <Input
@@ -636,7 +663,7 @@ const Grupos = () => {
                             }
                             required
                           >
-                            <option value="">Selecciona un curso...</option>
+                            <option value="">Seleccionar...</option>
                             {cursos.map((curso) => (
                               <option key={curso.id} value={curso.id}>
                                 {curso.codigo} - {curso.nombre}

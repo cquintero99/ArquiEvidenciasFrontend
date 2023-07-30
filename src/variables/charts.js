@@ -167,11 +167,11 @@ var colors = {
   },
   theme: {
     default: "#172b4d",
-    primary: "#5e72e4",
+    primary: "#000080",
     secondary: "#f4f5f7",
     info: "#11cdef",
     success: "#2dce89",
-    danger: "#f5365c",
+    danger: "#b43432",
     warning: "#fb6340",
   },
   black: "#12263F",

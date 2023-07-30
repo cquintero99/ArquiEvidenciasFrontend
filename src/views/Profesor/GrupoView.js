@@ -31,28 +31,6 @@ import { Link } from 'react-router-dom';
 
 const GrupoView = () => {
 
-  const courses = [
-    {
-      id: 1,
-      title: 'Matemáticas Avanzadas',
-      description: 'Este curso cubrirá temas avanzados de matemáticas.',
-      students: 30,
-    },
-    {
-      id: 2,
-      title: 'Historia Universal',
-      description: 'Un recorrido por los acontecimientos históricos más importantes.',
-      students: 25,
-    },
-    {
-      id: 3,
-      title: 'Programación en JavaScript',
-      description: 'Aprende a programar aplicaciones web usando JavaScript.',
-      students: 40,
-    },
-  ];
-
-
 
   return (
     <>
@@ -61,23 +39,7 @@ const GrupoView = () => {
       <Container className="mt--7" fluid>
         {/* Contenido */}
         <Row>
-          {courses.map((course) => (
-            <Col key={course.id} md={4}>
-              <Card className="shadow mb-4">
-                <CardHeader className="border-0 d-flex align-items-center justify-content-between">
-                  <h3 className="mb-0">{course.title}</h3>
-                  <span className="badge badge-primary">Estudiantes: {course.students}</span>
-                </CardHeader>
-                <CardBody>
-                  <p>{course.description}</p>
-                </CardBody>
-                <CardFooter>
-                  <Button color="primary">Ingresar al curso</Button>
-                  {/* Aquí podrías agregar más acciones como editar el curso, ver calificaciones, etc. */}
-                </CardFooter>
-              </Card>
-            </Col>
-          ))}
+      
         </Row>
       </Container>
     </>
