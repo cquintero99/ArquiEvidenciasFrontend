@@ -14,10 +14,13 @@ import urlBackend from "../urlBackend";
   }
 
   async function cargaMasiva(file){
-   // let token=localStorage.getItem("token")
+   const token=localStorage.getItem("token")
     const result=await fetch(urlBackend+"estudiante",{
         method:'POST',
-        body:(file)
+        body:(file),
+        header:{
+          "Authorization":"Bearer "+token
+        }
     })
     return result;
   }

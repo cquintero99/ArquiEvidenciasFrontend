@@ -250,6 +250,8 @@ const Cursos = () => {
                     data={filteredCursos}
                     pointerOnHover
                     responsive
+                    sortActive
+                    sortDirection
                     highlightOnHover
                     search // Activa la búsqueda
                     noDataComponent="No se encontraron registros para mostrar."
