@@ -31,7 +31,7 @@ const Login = () => {
                 © {new Date().getFullYear()}{" "}
                 <a
                   className="font-weight-bold ml-1 text-dark"
-                  href="https://www.creative-tim.com?ref=adr-auth-footer"
+                  href=""
                   target="_blank"
                 >
                   Arquitectura Evidencias UFPS

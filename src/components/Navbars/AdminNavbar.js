@@ -64,7 +64,7 @@ const AdminNavbar = (props) => {
             className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
             to="/"
           >
-            {props.brandText}
+            INICIO
           </Link>
 
           <Nav className="align-items-center d-none d-md-flex" navbar>
@@ -74,7 +74,7 @@ const AdminNavbar = (props) => {
                   <span className="avatar avatar-sm rounded-circle">
                     <img
                       alt="..."
-                      src={require("../../assets/img/theme/team-4-800x800.jpg")}
+                      src={require("../../assets/img/user/user.png")}
                     />
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
@@ -92,18 +92,7 @@ const AdminNavbar = (props) => {
                   <i className="ni ni-single-02" />
                   <span>Mi Perfil</span>
                 </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-settings-gear-65" />
-                  <span>Settings</span>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-calendar-grid-58" />
-                  <span>Activity</span>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-support-16" />
-                  <span>Support</span>
-                </DropdownItem>
+                
                 <DropdownItem divider />
                 <DropdownItem onClick={handleCerrarSesion}>
                   <i className="ni ni-user-run" />

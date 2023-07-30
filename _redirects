@@ -1,0 +1,4 @@
+/auth/*    /auth/login   200
+/director/*    /director/index.html   200
+/profesor/*    /profesor/index.html   200
+/estudiante/*  /estudiante/index.html 200

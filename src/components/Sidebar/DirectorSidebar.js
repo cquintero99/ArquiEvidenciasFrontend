@@ -23,11 +23,6 @@ import { PropTypes } from "prop-types";
 
 // reactstrap components
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Collapse,
   DropdownMenu,
   DropdownItem,
@@ -45,16 +40,24 @@ import {
   NavItem,
   NavLink,
   Nav,
-  Progress,
-  Table,
   Container,
   Row,
   Col,
 } from "reactstrap";
 
-var ps;
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = (props) => {
+  const navigate = useNavigate();
+  // Función para cerrar sesión y redirigir al usuario al login
+  const handleCerrarSesion = () => {
+    // Borramos el token del localStorage
+    localStorage.clear();
+
+    // Redirigimos al usuario al login
+    navigate("/auth/login", { replace: true });
+    window.location.replace("/auth/login");
+  };
   const [collapseOpen, setCollapseOpen] = useState();
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
@@ -127,21 +130,7 @@ const Sidebar = (props) => {
         ) : null}
         {/* User */}
         <Nav className="align-items-center d-md-none">
-          <UncontrolledDropdown nav>
-            <DropdownToggle nav className="nav-link-icon">
-              <i className="ni ni-bell-55" />
-            </DropdownToggle>
-            <DropdownMenu
-              aria-labelledby="navbar-default_dropdown_1"
-              className="dropdown-menu-arrow"
-              right
-            >
-              <DropdownItem>Action</DropdownItem>
-              <DropdownItem>Another action</DropdownItem>
-              <DropdownItem divider />
-              <DropdownItem>Something else here</DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown>
+          
           <UncontrolledDropdown nav>
             <DropdownToggle nav>
               <Media className="align-items-center">
@@ -155,28 +144,17 @@ const Sidebar = (props) => {
             </DropdownToggle>
             <DropdownMenu className="dropdown-menu-arrow" right>
               <DropdownItem className="noti-title" header tag="div">
-                <h6 className="text-overflow m-0">Welcome!</h6>
+                <h6 className="text-overflow m-0">Bienvenido!</h6>
               </DropdownItem>
               <DropdownItem to="/admin/user-profile" tag={Link}>
                 <i className="ni ni-single-02" />
-                <span>My profile</span>
+                <span>Mi perfil</span>
               </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-settings-gear-65" />
-                <span>Settings</span>
-              </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-calendar-grid-58" />
-                <span>Activity</span>
-              </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-support-16" />
-                <span>Soporte</span>
-              </DropdownItem>
+
               <DropdownItem divider />
-              <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+              <DropdownItem href="#pablo" onClick={handleCerrarSesion}>
                 <i className="ni ni-user-run" />
-                <span>Logout</span>
+                <span>Cerrar Sesion</span>
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
@@ -234,8 +212,6 @@ const Sidebar = (props) => {
           {/* Heading */}
           <h6 className="navbar-heading  text-center">UFPS</h6>
           {/* Navigation */}
-          
-          
         </Collapse>
       </Container>
     </Navbar>

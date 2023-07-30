@@ -1,20 +1,4 @@
-/*!
 
-=========================================================
-* Argon Dashboard React - v1.2.3
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 // reactstrap components
 import React, { useState, useEffect } from "react";
 import {
@@ -32,6 +16,8 @@ import {
   Input,
   FormText,
   Col,
+  CardFooter,
+  CardBody
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -45,6 +31,9 @@ const Tables = () => {
   const [profesores, setProfesores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState("");
+  const [profesor, setProfesor] = useState(null); // Estado para almacenar el estudiante seleccionado
+  const [modalProfesor, setModalProfesor] = useState(false);
+  const toggleProfesor = () => setModalProfesor(!modalProfesor);
 
   useEffect(() => {
     const obtenerProfesores = async () => {
@@ -65,7 +54,7 @@ const Tables = () => {
     { name: "Codigo", selector: "usuario.codigo", sortable: true },
     {
       name: "Correo Institucional",
-      selector: "usuario.correo",
+      selector: "usuario.correoInstitucional",
       sortable: true,
     },
     // { name: "Estado Matricula", selector: "estadoMatricula", sortable: true },
@@ -82,6 +71,9 @@ const Tables = () => {
   ];
   const handleOpciones = (profesor) => {
     // Aquí puedes manejar las acciones para el botón de opciones, como mostrar un modal o redirigir a otra página, etc.
+   
+    setProfesor(profesor)
+    toggleProfesor()
     console.log("Opciones del profesor:", profesor);
   };
   // Filtrar los datos en base al término de búsqueda
@@ -141,6 +133,116 @@ const Tables = () => {
           </div>
         </Row>
       </Container>
+      {/*Modal Ver Profesor*/ }
+      <Modal
+        className="modal-dialog-centered"
+        size="lg"
+        isOpen={modalProfesor}
+        toggle={toggleProfesor}
+      >
+        <div className="modal-body p-0">
+          <Card className="bg-secondary shadow border-0">
+            <CardHeader className="bg-transparent pb-0">
+              <div className="text-muted text-center mt-2 mb-3">
+                <h2>Datos del Profesor</h2>
+              </div>
+            </CardHeader>
+            <CardBody className="px-lg-3 py-lg-2">
+              {profesor && ( // Comprueba si hay un estudiante seleccionado antes de mostrar sus detalles
+                <>
+                  <Row>
+                    <Col md="8">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Nombre Completo</Label>
+                        <Input
+                          disabled
+                          value={profesor.usuario.nombre}
+                          type="text"
+                          className="text-center"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Celular</Label>
+                        <Input
+                          disabled
+                          value={profesor.usuario.celular}
+                          type="text"
+                          className="text-center"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="8">
+                      <FormGroup>
+                        <Label for="labelEstudiante">
+                          Correo Institucional
+                        </Label>
+                        <Input
+                          disabled
+                          value={profesor.usuario.correoInstitucional}
+                          type="text"
+                          className="text-center"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Código</Label>
+                        <Input
+                          disabled
+                          value={profesor.usuario.codigo}
+                          type="text"
+                          className="text-center"
+                        />
+                      </FormGroup>
+                    </Col>
+                    
+                    <Col md="6">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Departamento</Label>
+                        <Input
+                          disabled
+                          value={profesor.departamento}
+                          type="text"
+                          className="text-center"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="6">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Tipo de Vinculacion</Label>
+                        <Input
+                          disabled
+                          value={profesor.tipoVinculacion}
+                          type="text"
+                          className="text-center"
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  
+
+                
+                </>
+              )}
+            </CardBody>
+            <CardFooter>
+              <div className="text-center">
+                <Button
+                  className="my-0 text-white"
+                  type="button"
+                  color="default"
+                  onClick={toggleProfesor}
+                >
+                  Cerrar
+                </Button>
+              </div>
+            </CardFooter>
+          </Card>
+        </div>
+      </Modal>
+      {/* Modal Carga Masiva Profesores*/ }
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>Carga masiva de profesores</ModalHeader>
         <ModalBody>

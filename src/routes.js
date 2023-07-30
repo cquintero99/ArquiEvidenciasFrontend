@@ -26,6 +26,8 @@ import Estudiantes from "views/Director/Estudiantes";
 import Profesores from "views/Director/Profesores";
 import IndexDirector from "views/Director/Index"
 import Cursos from "views/Director/Cursos"
+import Grupos from "views/Director/Grupos"
+import GruposProfesor from "views/Profesor/Grupos"
 
 var routes = [
   
@@ -63,7 +65,7 @@ var routes = [
     path: "/grupos",
     name: "Grupos",
     icon: "ni ni-books text-yellow",
-    component: <Tables />,
+    component: <Grupos />,
     layout: "/director",
   },
   {
@@ -73,7 +75,6 @@ var routes = [
     component: <Icons />,
     layout: "/director",
   },
-  
   {
     path: "/index",
     name: "Dashboard",
@@ -82,10 +83,10 @@ var routes = [
     layout: "/profesor",
   },
   {
-    path: "/cursos",
-    name: "Cursos",
+    path: "/grupos",
+    name: "Grupos",
     icon: "ni ni-collection text-info",
-    component: <Tables />,
+    component: <GruposProfesor />,
     layout: "/profesor",
   },
   {

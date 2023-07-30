@@ -79,7 +79,7 @@ const Login = () => {
                   navigate("/"+rol+"/index")
 
                 } else {
-                  alert("Contraseña Incorrecta")
+                  alert("Contraseña Incorrecta");
                 }
               })
               .catch(err => {

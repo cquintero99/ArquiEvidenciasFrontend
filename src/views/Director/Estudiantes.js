@@ -34,6 +34,8 @@ import {
   Input,
   FormText,
   Col,
+  CardBody,
+  CardFooter,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header";
@@ -43,7 +45,14 @@ import {
   cargaMasiva,
 } from "views/fetch/Director/EstudianteApi";
 import DataTable from "react-data-table-component";
-const Tables = () => {
+import {
+  customStyles,
+  customTheme,
+} from "components/Datatable/DatatableCustom";
+import { Badge } from "reactstrap";
+import Swal from "sweetalert2";
+
+const Estudiantes = () => {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
   const [modalEstudiante, setModalEstudiente] = useState(false);
@@ -69,17 +78,37 @@ const Tables = () => {
   useEffect(() => {
     obtenerEstudiantes();
   }, []);
+
+  //Columnas de la cabecera de la table
   const columns = [
+    {
+      name: "Codigo",
+      cell: (row) => {
+        const badgeContent =
+          row.estadoMatricula === "MATRICULADO" ? (
+            <Badge color="" className="badge-dot">
+              <i className="bg-success" />
+            </Badge>
+          ) : (
+            <Badge color="" className="badge-dot">
+              <i className="bg-danger" />
+            </Badge>
+          );
+
+        return (
+          <>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {badgeContent}
+              <span style={{ marginLeft: "10px" }}>{row.usuario.codigo}</span>
+            </div>
+          </>
+        );
+      },
+    },
     {
       name: "Nombre",
       cell: (row) => row.usuario.nombre,
       selector: (row) => row.usuario.nombre,
-      sortable: true,
-    },
-    {
-      name: "Codigo",
-      cell: (row) => row.usuario.codigo,
-      selector: (row) => row.usuario.codigo,
       sortable: true,
     },
     {
@@ -98,7 +127,7 @@ const Tables = () => {
       name: "Ver",
       cell: (row) => (
         <i
-          className="fa fa-eye text-danger"
+          className="fa fa-eye text-muted"
           onClick={() => handleOpciones(row)}
         />
       ),
@@ -106,12 +135,10 @@ const Tables = () => {
       allowOverflow: true,
       button: true,
     },
-    // Puedes agregar más columnas aquí si lo deseas
   ];
 
   //Obtengo los datos del estudiante
   const handleOpciones = (estudiante) => {
-    //Abro el modal
     toggleEstudiante();
     setEstudiante(estudiante);
   };
@@ -126,31 +153,45 @@ const Tables = () => {
     }
   };
 
+  //Vaciar el file seleccionado
   const handleModalClosed = () => {
     setFileName("");
   };
 
   // Filtrar los datos en base al término de búsqueda
-
   const filteredEstudiantes = estudiantes.filter((estudiante) =>
     estudiante.usuario.codigo.toLowerCase().includes(filtro.toLowerCase())
   );
 
-  //Carga masiva Estudiantes
+  // Carga masiva Estudiantes
   const handelSubmitCargaMasiva = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const fileExcel = formData.get("file");
-
     const formDataFile = new FormData();
     formDataFile.append("archivo", fileExcel);
     cargaMasiva(formDataFile)
       .then((response) => response)
       .then((data) => {
         toggle();
+        Swal.fire({
+          icon: "success",
+          title: "¡Completado!",
+          text: "La carga de estudiantes se ha completado con éxito.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         obtenerEstudiantes();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.error(err);
+        Swal.fire({
+          icon: "error",
+          title: "Ha ocurrido un error.",
+          text: "Por favor, verifica el archivo y vuelve a intentarlo.",
+          confirmButtonText: "Aceptar",
+        });
+      });
   };
 
   return (
@@ -163,48 +204,53 @@ const Tables = () => {
           <div className="col">
             <Card className="shadow">
               <CardHeader className=" border-0 d-flex">
-                <h3 className="mb-0">Lista Estudiantes</h3>
+                <h2 className="mb-0">Gestionar Estudiantes</h2>
                 <Button color="danger" onClick={toggle} className="ml-auto">
                   Carga Masiva
                 </Button>
               </CardHeader>
-              {loading ? (
-                <p className="text-center ">Cargando estudiantes...</p>
-              ) : (
-                <>
-                  <FormGroup row>
-                    <Label for="filtro" sm={2} className="text-center">
-                      Buscador
-                    </Label>
-                    <Col sm={9}>
-                      <Input
-                        type="text"
-                        className=""
-                        placeholder="Buscar por codigo..."
-                        value={filtro}
-                        onChange={(e) => setFiltro(e.target.value)}
-                      />
-                    </Col>
-                  </FormGroup>
-
-                  <DataTable
-                    columns={columns}
-                    data={filteredEstudiantes}
-                    striped
-                    pointerOnHover
-                    highlightOnHover
-                    search // Activa la búsqueda
-                    pagination // Activa la paginación
-                    paginationComponentOptions={{
-                      rowsPerPageText: "Filas por página:",
-                      rangeSeparatorText: "de",
-                      selectAllRowsItem: true,
-                      selectAllRowsItemText: "Todos",
-                      selectAllRowsItemShow: true,
-                    }}
-                  />
-                </>
-              )}
+              <CardBody>
+                {loading ? (
+                  <p className="text-center ">Cargando estudiantes...</p>
+                ) : (
+                  <>
+                    <FormGroup row className="justify-content-end mr-2">
+                      <Label for="filtro" sm={3} className="text-center">
+                        Buscador:
+                      </Label>
+                      <Col sm={9}>
+                        <Input
+                          type="text"
+                          className=""
+                          placeholder="Buscar por código..."
+                          value={filtro}
+                          onChange={(e) => setFiltro(e.target.value)}
+                        />
+                      </Col>
+                    </FormGroup>
+                    {/* Data table react component */}
+                    <DataTable
+                      theme={customTheme}
+                      customStyles={customStyles}
+                      columns={columns}
+                      data={filteredEstudiantes}
+                      pointerOnHover
+                      responsive
+                      highlightOnHover
+                      search // Activa la búsqueda
+                      noDataComponent="No se encontraron registros para mostrar."
+                      pagination // Activa la paginación
+                      paginationComponentOptions={{
+                        rowsPerPageText: "Filas por página:",
+                        rangeSeparatorText: "de",
+                        selectAllRowsItem: true,
+                        selectAllRowsItemText: "Todos",
+                        selectAllRowsItemShow: true,
+                      }}
+                    />
+                  </>
+                )}
+              </CardBody>
             </Card>
           </div>
         </Row>
@@ -213,7 +259,7 @@ const Tables = () => {
       {/* Modal carga masiva */}
       <Modal
         className="modal-dialog-centered modal-danger"
-        contentClassName="bg-gradient-danger"
+        contentClassName="bg-danger"
         isOpen={modal}
         toggle={toggle}
         onClosed={handleModalClosed}
@@ -244,7 +290,10 @@ const Tables = () => {
                     className="input-file"
                     onChange={showFileName} // Actualizar el estado con el nombre del archivo seleccionado
                   />
-                  <label htmlFor="fileExcel" className="input-file">
+                  <label
+                    htmlFor="fileExcel"
+                    className="input-file bg-white text-dark"
+                  >
                     Seleccionar archivo
                   </label>
                   {/* Mostrar el nombre del archivo seleccionado */}
@@ -257,7 +306,7 @@ const Tables = () => {
             </div>
           </ModalBody>
           <ModalFooter className="d-flex justify-content-between">
-            <Button className="text-white" color="link" onClick={toggle}>
+            <Button className="text-white" color="default" onClick={toggle}>
               Salir
             </Button>
             <Button className="btn-white" color="default" type="submit">
@@ -267,55 +316,160 @@ const Tables = () => {
         </Form>
       </Modal>
 
-      <Modal isOpen={modalEstudiante} toggle={toggleEstudiante}>
-        <ModalHeader toggle={toggleEstudiante}>
-          <h1>Informacion del estudiante</h1>
-        </ModalHeader>
-        <ModalBody className="text-dark fw-bold  ">
-          {estudiante && ( // Comprueba si hay un estudiante seleccionado antes de mostrar sus detalles
-            <>
-              <p>
-                <strong>Nombre:</strong> {estudiante.usuario.nombre}
-              </p>
-              <p>
-                <strong>Código:</strong> {estudiante.usuario.codigo}
-              </p>
-              <p>
-                <strong>Tipo de documento:</strong> {estudiante.tipoDocumento}
-              </p>
+      {/* Modal datos del estudiante */}
+      <Modal
+        className="modal-dialog-centered"
+        size="lg"
+        isOpen={modalEstudiante}
+        toggle={toggleEstudiante}
+      >
+        <div className="modal-body p-0">
+          <Card className="bg-secondary shadow border-0">
+            <CardHeader className="bg-transparent pb-0">
+              <div className="text-muted text-center mt-2 mb-3">
+                <h2>Datos del Estudiante</h2>
+              </div>
+            </CardHeader>
+            <CardBody className="px-lg-3 py-lg-2">
+              {estudiante && ( // Comprueba si hay un estudiante seleccionado antes de mostrar sus detalles
+                <>
+                  <Row>
+                    <Col md="6">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Nombre Completo</Label>
+                        <Input
+                          disabled
+                          value={estudiante.usuario.nombre}
+                          type="text"
+                          className="text-center"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="6">
+                      <FormGroup>
+                        <Label for="labelEstudiante">
+                          Correo Institucional
+                        </Label>
+                        <Input
+                          disabled
+                          value={estudiante.usuario.correo}
+                          type="text"
+                          className="text-center"
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Código</Label>
+                        <Input
+                          disabled
+                          value={estudiante.usuario.codigo}
+                          type="text"
+                          className="text-center"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label for="selectTipoDocumento">
+                          Tipo de Documento
+                        </Label>
+                        <Input
+                          disabled
+                          type="select"
+                          id="selectTipoDocumento"
+                          value={estudiante.tipoDocumento}
+                          className="text-center"
+                        >
+                          <option value="CC">Cedula Ciudadania</option>
+                          <option value="PA">Pasaporte</option>
+                          <option value="TI">Tarjeta Identidad</option>
+                          <option value="CE">Cedula extranjeria</option>
+                          <option value="Vi">Otro</option>
+                        </Input>
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Documento</Label>
+                        <Input
+                          disabled
+                          value={estudiante.documento}
+                          type="text"
+                          className="text-center"
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
 
-              <p>
-                <strong>Documento:</strong> {estudiante.documento}
-              </p>
-              <p>
-                <strong>Estado de matrícula:</strong>{" "}
-                {estudiante.estadoMatricula}
-              </p>
-              <p>
-                <strong>Pensum:</strong> {estudiante.pensum}
-              </p>
-              <p>
-                <strong>Semestre:</strong> {estudiante.semestre}
-              </p>
-
-              <p>
-                <strong>Celular:</strong> {estudiante.usuario.celular}
-              </p>
-
-              <p>
-                <strong>Correo:</strong> {estudiante.usuario.correo}
-              </p>
-            </>
-          )}
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={toggleEstudiante}>
-            Cerrar
-          </Button>
-        </ModalFooter>
+                  <Row>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Celular</Label>
+                        <Input
+                          disabled
+                          value={estudiante.usuario.celular}
+                          type="text"
+                          className="text-center"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="4">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Estado Matricula</Label>
+                        <Input
+                          disabled
+                          value={estudiante.estadoMatricula}
+                          type="text"
+                          className="text-center"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="2">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Semestre</Label>
+                        <Input
+                          disabled
+                          value={estudiante.semestre}
+                          type="text"
+                          className="text-center"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="2">
+                      <FormGroup>
+                        <Label for="labelEstudiante">Pensum</Label>
+                        <Input
+                          disabled
+                          value={estudiante.pensum}
+                          type="text"
+                          className="text-center"
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </>
+              )}
+            </CardBody>
+            <CardFooter>
+              <div className="text-center">
+                <Button
+                  className="my-0 text-white"
+                  type="button"
+                  color="default"
+                  onClick={toggleEstudiante}
+                >
+                  Cerrar
+                </Button>
+              </div>
+            </CardFooter>
+          </Card>
+        </div>
       </Modal>
     </>
   );
 };
 
-export default Tables;
+export default Estudiantes;
